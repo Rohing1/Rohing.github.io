@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/har/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:08 GMT -->
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="网页性能侦探：在本地浏览器分析 HAR 文件，查看网络瀑布图、慢请求和耗时线索。文件不上传。">
+  <title>网页性能侦探 · 在线工具</title>
+  <link rel="stylesheet" href="../common3860.css?v=1"><link rel="stylesheet" href="har3860.css?v=1">
+  <script defer src="har-model3860.js?v=1"></script><script defer src="har322c.js?v=20261005c"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>◈ 网页性能侦探</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="intro"><div><span class="eyebrow">LOCAL HAR / NETWORK TIMELINE</span><h1>网页为什么慢？<br><span>沿着请求找答案。</span></h1><p class="description">导入浏览器网络面板导出的 HAR，拆开 DNS、建连、等待首字节和下载时间，快速找出值得优先排查的请求。</p></div><span class="local-badge">◉ 只在本机解析</span></section>
+    <div class="privacy-note"><strong>先看隐私：</strong>HAR 可能包含完整 URL、Cookie、Authorization、请求体与个人信息。请优先从浏览器导出“已脱敏 HAR”，不要上传到陌生网站。本工具不上传、不自动保存文件，也不展示请求头或响应体；页面仅显示截短路径，但普通路径片段仍可能含敏感信息。选择文件后只在本机内存中解析，关闭页面即清除。</div>
+    <section class="panel import-panel"><div class="import-head"><div><span class="section-kicker">01 / IMPORT</span><h2>导入 HAR</h2><p class="hint">支持标准 .har / JSON，文件上限 32 MiB、请求上限 25,000 条。超大文件建议先按时间或域名筛选后再导出。</p></div><button id="demo" type="button">加载演示样本</button></div>
+      <div id="dropzone" class="dropzone"><span class="drop-icon">↥</span><strong>拖放 HAR 到这里</strong><span>或点击选择本地文件</span><input id="file" type="file" accept=".har,.json,application/json" aria-label="选择 HAR 文件"></div>
+      <div class="import-foot"><span id="file-label">尚未选择文件</span><button id="clear" type="button" disabled>清除结果</button></div><p id="status" class="status" role="status" aria-live="polite">等待导入。不会向 HAR 中的网址发起请求。</p>
+    </section>
+    <div id="results" hidden>
+      <section class="metrics" aria-label="HAR 概况"><div class="metric"><span>请求数</span><strong id="m-requests">—</strong><small id="m-pages">—</small></div><div class="metric"><span>记录跨度</span><strong id="m-duration">—</strong><small>从首个请求开始到最后结束</small></div><div class="metric"><span>响应体估算</span><strong id="m-bytes">—</strong><small>HAR 字段可能缺失或重复</small></div><div class="metric accent"><span>排查线索</span><strong id="m-issues">—</strong><small>规则命中，不等于故障</small></div></section>
+      <div id="warnings" class="warnings" hidden></div>
+      <div class="overview-grid"><section class="panel"><span class="section-kicker">02 / TIME BREAKDOWN</span><h2>时间花在哪里</h2><p class="hint">各阶段为所有请求的累计值，存在并发，不能相加当作页面加载时间。TLS 从连接阶段拆出，避免重复计数。</p><div id="phase-bars" class="phase-bars"></div></section><section class="panel"><span class="section-kicker">03 / PRIORITY</span><h2>优先排查</h2><p class="hint">状态错误、耗时较长和大响应体是线索；例如等待首字节长不一定是服务器故障。</p><div id="findings" class="finding-list"></div></section></div>
+      <section class="panel host-panel"><span class="section-kicker">04 / HOSTS</span><h2>主机概览</h2><div id="hosts" class="host-list"></div></section>
+      <section class="panel waterfall-panel"><div class="section-heading"><div><span class="section-kicker">05 / WATERFALL</span><h2>请求瀑布图</h2></div><span id="shown" class="hint"></span></div><div class="filters"><label>搜索主机或路径<input id="search" type="search" placeholder="例如 api.example.com / main.js" autocomplete="off"></label><label>筛选<select id="filter"><option value="all">全部请求</option><option value="issues">只看排查线索</option><option value="errors">只看 HTTP 错误</option></select></label><label>排序<select id="sort"><option value="start">开始时间</option><option value="slow">耗时最长</option><option value="size">响应体最大</option></select></label></div><div class="legend" aria-label="瀑布图颜色"><span class="blocked">阻塞</span><span class="dns">DNS</span><span class="connect">连接</span><span class="ssl">TLS</span><span class="send">发送</span><span class="wait">等待首字节</span><span class="receive">接收</span></div><div class="table-wrap"><table><thead><tr><th>请求</th><th>状态</th><th>耗时</th><th>大小</th><th class="chart-head">时间轴：从首个请求开始</th></tr></thead><tbody id="rows"></tbody></table></div><div class="pager"><button id="prev" type="button">上一页</button><span id="page-label">—</span><button id="next" type="button">下一页</button></div><p class="hint">时间轴长度按整个 HAR 记录跨度缩放；请求过多时每页显示 50 条。路径只显示末两段，查询参数隐藏。</p></section>
+    </div><p class="footer">本地解析 · 无网络探测 · 无自动保存 · 请勿将未脱敏 HAR 分享给他人</p>
+  </main>
+  <dialog id="detail"><div class="detail-head"><div><span class="section-kicker">REQUEST DETAIL</span><h2 id="detail-title">请求详情</h2></div><button id="close-detail" type="button" aria-label="关闭详情">✕</button></div><div id="detail-content"></div><p class="hint">这里不显示完整 URL、查询参数、请求头或响应体。阶段时间依赖 HAR 导出器，缺失字段不代表实际为零。</p></dialog>
+</body>
+<!-- Mirrored from https://yan-jian.com/interactive/har/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:08 GMT -->
+</html>

@@ -1,0 +1,16 @@
+.yj-tool-guide{margin:0 0 22px;border:1px solid #cbdcf4;border-radius:14px;background:#f8fbff;color:#183047;overflow:hidden;box-shadow:0 8px 24px rgba(24,48,71,.04)}
+.yj-tool-guide summary{display:flex;align-items:center;gap:9px;min-height:46px;padding:0 16px;cursor:pointer;font-weight:750;list-style:none;color:#244b75;user-select:none}
+.yj-tool-guide summary::-webkit-details-marker{display:none}
+.yj-tool-guide summary::before{content:'?';display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#e3efff;color:#2563eb;font-size:13px;font-weight:850;flex:0 0 auto}
+.yj-tool-guide summary::after{content:'展开';margin-left:auto;color:#68819b;font-size:12px;font-weight:500}
+.yj-tool-guide[open] summary{border-bottom:1px solid #dce7f4;background:#f3f8ff}
+.yj-tool-guide[open] summary::after{content:'收起'}
+.yj-tool-guide__body{padding:16px 18px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);gap:20px}
+.yj-tool-guide__body p{margin:0;color:#566f89;font-size:13px;line-height:1.75}
+.yj-tool-guide__body strong{display:block;margin-bottom:6px;color:#183047;font-size:14px}
+.yj-tool-guide__steps{margin:0;padding-left:22px;color:#294763;font-size:13px;line-height:1.8}
+.yj-tool-guide__note{grid-column:1/-1;margin-top:-4px!important;padding:9px 11px;border-radius:9px;background:#fff7e6;color:#8a5800!important;border:1px solid #f3d69a}
+.yj-tool-guide__note.is-neutral{background:#f3f6fa;color:#60758a!important;border-color:#e0e7ef}
+body.yj-guide-fullscreen .yj-tool-guide,:fullscreen .yj-tool-guide,:-webkit-full-screen .yj-tool-guide{display:none!important}
+@media(max-width:720px){.yj-tool-guide{margin-bottom:16px}.yj-tool-guide__body{grid-template-columns:1fr;gap:12px;padding:14px}.yj-tool-guide__note{grid-column:auto}.yj-tool-guide summary{padding:0 13px}}
+

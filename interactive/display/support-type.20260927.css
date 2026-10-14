@@ -1,0 +1,7 @@
+/* Readable auxiliary text for projection; keep compact previews and phones. */
+.stage-support>.stage-footer{opacity:.9;line-height:1.5}
+.stage-meta time{opacity:.9;font-weight:500}
+.stage-meta>.qr-box{align-self:center}
+.stage:fullscreen .stage-support>.stage-footer{font-size:clamp(22px,2.4vh,26px)}
+.stage:fullscreen .stage-meta time{font-size:clamp(20px,2.2vh,24px)}
+@media(max-width:640px){.stage:fullscreen .stage-support>.stage-footer{font-size:14px}.stage:fullscreen .stage-meta time{font-size:14px}}

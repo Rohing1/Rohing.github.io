@@ -1,0 +1,21 @@
+(() => {
+  'use strict';
+  const slug = location.pathname.split('/').filter(Boolean).pop();
+  const E = (t, text, cls) => { const n = document.createElement(t); if(text != null)n.textContent=text;if(cls)n.className=cls;return n; };
+  const main=document.querySelector('main');if(!main)return;
+  const nav=E('nav',null,'wb-bar');nav.setAttribute('aria-label','工具工作区');
+  const home=E('a','全部工具');home.href='../index.html';const data=E('a','备份与存储');data.href='../data/index.html';
+  const focus=E('button','专注工作区');focus.type='button';focus.setAttribute('aria-pressed','false');
+  focus.onclick=()=>{const on=document.body.classList.toggle('wb-focused');focus.textContent=on?'显示页面介绍':'专注工作区';focus.setAttribute('aria-pressed',String(on));};
+  nav.append(E('span','本地工作区 · 数据不会上传','wb-current'),home,data,focus);main.prepend(nav);
+  document.body.classList.add('wb-mobile');
+  const skipTables=new Set(['rack','har','topology','whiteboard']);
+  function decorate(root=document){if(skipTables.has(slug))return;for(const table of root.querySelectorAll('table')){if(table.closest('#stage,.stage,.room3d,.panorama')||table.dataset.wbKeep==='true')continue;const headers=[...table.querySelectorAll('thead tr:last-child th')].map(n=>n.textContent.trim());if(!headers.length||headers.length>9)continue;table.classList.add('wb-card-table');for(const row of table.tBodies)for(const tr of row.rows)for(let i=0;i<tr.cells.length;i++){const cell=tr.cells[i];const label=headers[i]||'内容';if(cell.dataset.wbLabel!==label)cell.dataset.wbLabel=label;}}}
+  let timer;const obs=new MutationObserver(records=>{if(records.every(r=>!r.addedNodes.length))return;clearTimeout(timer);timer=setTimeout(()=>{decorate();advanced();},80);});obs.observe(main,{childList:true,subtree:true});decorate();
+  const primary={assets:['#add','#asset-scan'],projects:['#new-issue','#new-project'],ipam:['#save-network','#add-network'],logs:['#files','#file'],sqlite:['#run','#open'],poster:['#png'],video:['#export'],audio:['#process'],display:['#present']};
+  const selectors=primary[slug];if(selectors){const dock=E('div',null,'wb-mobile-dock');for(const selector of selectors){const source=document.querySelector(selector);if(!source||source.tagName==='INPUT')continue;const b=E('button',source.textContent.trim());b.type='button';b.disabled=source.disabled;b.onclick=()=>{if(source.disabled){source.scrollIntoView({block:'center',behavior:'smooth'});return;}source.click();};dock.append(b);new MutationObserver(()=>{b.disabled=source.disabled;b.textContent=source.textContent.trim();}).observe(source,{attributes:true,childList:true,subtree:true});}if(dock.childElementCount)document.body.append(dock);}
+  if(slug==='projects'){document.querySelector('#data-tools')?.removeAttribute('open');const tabs=document.querySelector('.view-tabs');if(tabs){const more=E('details',null,'wb-more');more.append(E('summary','更多项目视图'));const row=E('div',null,'wb-row');for(const b of [...tabs.children])if(['calendar','roadmap','time','wiki'].includes(b.dataset.view))row.append(b);more.append(row);tabs.after(more);}const addPanel=document.querySelector('.ops-panel');if(addPanel){addPanel.dataset.wbFolded='true';const more=E('details',null,'wb-more');more.append(E('summary','排期、依赖与批量管理'));addPanel.before(more);more.append(addPanel);}}
+  function advanced(){if(slug==='projects'){const p=document.querySelector('.ops-panel:not([data-wb-folded])');if(p){p.dataset.wbFolded='true';const more=E('details',null,'wb-more');more.append(E('summary','排期、依赖与批量管理'));p.before(more);more.append(p);}}if(slug==='assets'){const p=[...document.querySelectorAll('.ops-panel')].find(n=>n.querySelector('h2')?.textContent.includes('盘点'));if(p&&!p.dataset.wbFolded){p.dataset.wbFolded='true';const more=E('details',null,'wb-more');more.append(E('summary','需要盘点时展开'));p.before(more);more.append(p);}}}advanced();
+  // Navigation preferences contain slugs only, never file names or document contents.
+  try{const list=JSON.parse(localStorage.getItem('yj-tool-recent-v1')||'[]');if(Array.isArray(list)&&/^[a-z-]+$/.test(slug)&&slug!=='data')localStorage.setItem('yj-tool-recent-v1',JSON.stringify([slug,...list.filter(x=>x!==slug&&typeof x==='string')].slice(0,10)));}catch{}
+})();

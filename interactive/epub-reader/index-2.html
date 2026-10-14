@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/epub-reader/index.html by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:48:39 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data:; connect-src 'self' blob: data:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline' blob: data:; script-src 'self'; font-src 'self' blob: data:; frame-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="theme-color" content="#e9e5da">
+  <meta name="description" content="离线 EPUB 阅读与摘录台：本地书架、阅读进度、书签、摘录笔记与完整备份。">
+  <title>墨页书房 · 离线 EPUB 阅读与摘录</title>
+  <link rel="stylesheet" href="reader.css">
+  <link rel="stylesheet" href="reader-additions.css">
+<link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><a href="../index.html" aria-label="返回在线工具">← 在线工具</a><span>墨页书房 <small>LOCAL READER</small></span></div>
+      <div class="top-actions"><span class="offline-pill" id="offline-status">仅在本机阅读</span><button type="button" id="library-button" class="quiet">书架</button><button type="button" id="backup-button" class="quiet">备份与恢复</button></div>
+    </header>
+
+    <main>
+      <section id="shelf-view" class="shelf-view">
+        <div class="intro"><div><span class="eyebrow">YOUR PRIVATE LIBRARY</span><h1>把故事留在手边。</h1><p>阅读无 DRM 的 EPUB；书籍、进度、书签与笔记保存在当前浏览器。内置书籍可逐本下载供离线阅读。</p></div><div class="intro-mark" aria-hidden="true">读<span>·</span>写</div></div>
+        <div class="privacy-note"><strong>本地数据提醒</strong><span>清理站点数据会丢失导入书籍与笔记。请定期下载完整备份；请勿在公用电脑保存私人书籍。</span></div>
+        <div class="shelf-toolbar"><div class="tabs" role="tablist" aria-label="书架分类"><button type="button" class="active" data-filter="all">全部书籍</button><button type="button" data-filter="imported">我的导入</button><button type="button" data-filter="builtin">内置书籍</button></div><label class="search"><span>查找</span><input id="shelf-search" type="search" placeholder="书名、作者或分类" maxlength="80"></label><label class="shelf-sort">排序<select id="shelf-sort"><option value="recent">最近阅读</option><option value="title">书名</option><option value="author">作者</option><option value="progress">阅读进度</option><option value="newest">最近导入</option></select></label><button type="button" id="all-notes-button" class="quiet">全部摘录</button><label class="import-button">＋ 导入 EPUB<input id="book-import" type="file" accept=".epub,application/epub+zip" multiple hidden></label></div>
+        <div id="storage-message" class="storage-message" role="status"></div>
+        <div id="backup-reminder" class="backup-reminder" role="status" hidden><span id="backup-reminder-text"></span><button type="button" id="backup-reminder-action">立即备份</button><button type="button" id="backup-reminder-dismiss" aria-label="暂不提醒">稍后</button></div>
+        <div id="offline-library-status" class="offline-library-status" role="status">正在检查离线书籍…</div>
+        <p class="book-scope-note">内置书籍有微型短篇、精选篇目和多章节作品，卡片会标明收录范围；阅读时“本节页数”不是整本书页数。</p>
+        <button type="button" id="resume-reading" class="resume-reading" hidden></button>
+        <div id="book-grid" class="book-grid"></div>
+        <div class="shelf-foot"><p>内置四篇微型短篇为本站原创，每篇约 800–900 字。《聊斋志异》作者蒲松龄，电子版来自 <a href="https://www.gutenberg.org/ebooks/51828" target="_blank" rel="noopener noreferrer">Project Gutenberg</a>，保留原电子书附带的许可说明。《A Byte of Python》为 Swaroop C H 的英文原版，原文见 <a href="https://python.swaroopch.com/" target="_blank" rel="noopener noreferrer">作者官网</a>，依 <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> 分享；内置 EPUB 未修改。</p><p>外国文学：《欧·亨利短篇精选》3 篇、《王尔德童话精选》3 篇，均非作者全集；《百万英镑》《忙碌经纪人的浪漫事》《爱的奉献》分别只收录同名完整短篇，不含原故事集其他篇目。《爱的奉献》情节含轻微烫伤。中文为本站 <strong>AI 辅助新译</strong>，并非现代出版社译本或权威校勘本；每篇附完整英文，可从目录切换对照。英文来源分别为 <a href="https://www.gutenberg.org/ebooks/2776" target="_blank" rel="noopener noreferrer">《四百万》</a>、<a href="https://www.gutenberg.org/ebooks/902" target="_blank" rel="noopener noreferrer">王尔德童话集</a>与<a href="https://www.gutenberg.org/ebooks/61522" target="_blank" rel="noopener noreferrer">《百万英镑及其他新故事》</a>，原作者、来源致谢和完整许可保留在书内。中文新译与导读依 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> 分享；不替代英文来源许可。</p><p>内置书籍可按需下载供离线阅读；清除离线副本不会删除进度或笔记。个人导入只留在本机，不上传到服务器。支持标准、无 DRM 的 EPUB；单本上限 80 MB，导入书库合计上限 300 MB。少数复杂排版或加密电子书可能无法显示。</p></div>
+      </section>
+
+      <section id="reader-view" class="reader-view" hidden>
+        <div class="reader-toolbar"><button type="button" id="back-to-shelf" class="quiet">← 书架</button><div class="reader-title"><strong id="current-title"></strong><small id="current-author"></small></div><div class="reader-actions"><button type="button" id="toc-button" class="quiet">目录</button><button type="button" id="find-button" class="quiet">书内搜索</button><button type="button" id="bookmark-button" class="quiet">☆ 书签</button><button type="button" id="note-button" class="quiet">摘录</button><button type="button" id="ios-select-text" class="quiet" hidden>选文摘录</button><button type="button" id="ios-cancel-select" class="quiet" hidden>取消选文</button><button type="button" id="settings-button" class="quiet">Aa 设置</button></div></div>
+        <div id="ios-selection-hint" class="ios-selection-hint" role="status" hidden>长按正文选中文字，再点“保存选文”。选文期间暂停滑动翻页。</div>
+        <div class="reading-frame"><button type="button" id="prev-page" class="page-arrow" aria-label="上一页">‹</button><div class="reading-surface"><div id="book-render" aria-label="电子书正文"></div><div id="ios-page-gestures" class="ios-page-gestures" aria-hidden="true" hidden></div></div><button type="button" id="next-page" class="page-arrow" aria-label="下一页">›</button></div>
+        <div class="reading-footer"><div class="chapter-info"><span id="chapter-label">准备阅读</span><small id="chapter-progress" title="仅表示当前章节的页数，不是全书总页数"></small></div><div class="progress-wrap"><input id="progress-slider" type="range" min="0" max="1000" value="0" aria-label="全书阅读进度"><span id="progress-label">全书 0%</span></div><span class="reader-hint" id="gesture-hint">右滑下一页 · 左滑上一页 · ← → 翻页</span></div>
+        <button type="button" id="controls-toggle" class="controls-toggle" hidden aria-label="显示阅读工具">显示工具</button>
+      </section>
+    </main>
+  </div>
+
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="side-drawer" class="side-drawer" aria-label="阅读工具" hidden><div class="drawer-head"><h2 id="drawer-title"></h2><button type="button" id="drawer-close" aria-label="关闭">×</button></div><div id="drawer-body" class="drawer-body"></div></aside>
+  <dialog id="backup-dialog"><form method="dialog"><div class="dialog-head"><h2>备份与恢复</h2><button type="submit" aria-label="关闭">×</button></div></form><p>完整备份包含导入的 EPUB 和全部阅读数据；轻量备份只包含进度、书签、摘录与设置，不包含书籍文件。文件均在本机生成，不上传。</p><div class="dialog-actions"><button type="button" id="export-backup" class="primary">下载完整备份 ZIP</button><button type="button" id="export-light-backup" class="secondary">下载轻量备份 JSON</button></div><div class="dialog-actions"><label class="secondary">恢复完整备份<input type="file" id="restore-backup" accept=".zip,application/zip" hidden></label><label class="secondary">恢复轻量备份<input type="file" id="restore-light-backup" accept=".json,application/json" hidden></label></div><p class="warning">完整恢复会替换当前书架。轻量恢复只覆盖匹配书籍的阅读记录；请先在新设备导入同一本 EPUB。恢复前建议先备份现有数据。</p><div id="backup-message" role="status"></div></dialog>
+  <dialog id="note-dialog"><form method="dialog"><div class="dialog-head"><h2 id="note-dialog-title">保存摘录</h2><button type="submit" aria-label="关闭">×</button></div></form><blockquote id="selected-quote"></blockquote><label class="note-label">我的想法<textarea id="note-text" rows="5" maxlength="3000" placeholder="写下想到的内容，也可以留空只保存摘录"></textarea></label><div class="note-options"><label>标记颜色<select id="note-color"><option value="gold">金黄</option><option value="mint">薄荷绿</option><option value="blue">天蓝</option><option value="pink">樱粉</option></select></label><label>标签（用逗号分隔）<input id="note-tags" type="text" maxlength="120" placeholder="例如：人物, 重点"></label></div><div class="dialog-actions"><button type="button" id="save-note" class="primary">保存摘录</button><button type="button" id="cancel-note" class="secondary">取消</button></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/epub.min.js"></script>
+  <script src="reader1633.js?v=20261010-books2" defer></script>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/epub-reader/index.html by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:48:39 GMT -->
+</html>

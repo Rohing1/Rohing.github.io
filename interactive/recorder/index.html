@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/recorder/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:21 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>本地录屏与演示工作台 · yan-jian.com</title>
+  <meta name="description" content="浏览器本地录屏，支持长会议保存到本地、麦克风、摄像头小窗与视频预览。不上传录制内容。">
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="../studio.20260927.css">
+  <link rel="stylesheet" href="preview.20260927a.css">
+  <link rel="stylesheet" href="recorder.20260928.css">
+  <script defer src="../common3860.js?v=1"></script>
+  <script defer src="recorder.20260928322c.js?v=20261005c"></script>
+  <script defer src="preview.20260927a.js"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><script defer src="../media-workflow.20261005f6e5.js?v=20261009"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><div class="brand">◉ 本地录屏与演示工作台</div><a href="../../index.html">返回文章网站 ↗</a></header>
+  <main class="shell">
+    <section class="intro"><div><span class="eyebrow">Record locally · Explain clearly</span><h1>把操作过程，讲清楚。</h1><p class="description">教程演示、操作留档、会议记录。短录模式在页面内存中暂存，长会议模式可选择本地文件并持续写入；均不上传录制内容。</p></div><span class="studio-badge">无需登录 · 本地录制</span></section>
+    <div class="studio-warning">请关闭含密码、客户资料和私人消息的窗口。麦克风与摄像头默认关闭；对方声音需要勾选“请求分享对象的声音”，且分享窗口实际允许采集音频。长会议请预留磁盘空间，录制结束并显示“已保存”后再关闭页面；浏览器崩溃或强制关机仍可能导致文件不可用。建议使用桌面版 Chrome / Edge。</div>
+    <div class="studio-grid">
+      <section class="panel studio-card stack">
+        <h2>录制设置</h2>
+        <label>录制模式<select id="mode"><option value="short">普通短录 · 完成后下载</option><option value="long">长会议 · 保存到本地文件</option></select></label>
+        <div id="file-picker-row" class="recorder-file-picker" hidden><button id="choose-file" type="button">选择本地保存位置</button><p id="file-choice" class="hint">尚未选择文件；浏览器不会向网页透露完整路径。</p></div>
+        <label>画质上限<select id="quality"><option value="1280">标准 · 720p</option><option value="1920" selected>清晰 · 1080p</option></select></label>
+        <label>帧率<select id="fps"><option value="15">15 fps · 操作留档</option><option value="30" selected>30 fps · 流畅演示</option></select></label>
+        <label class="check"><input id="system-audio" type="checkbox">请求分享对象的声音（含对方声音，取决于分享授权）</label>
+        <label class="check"><input id="microphone" type="checkbox">加入本机麦克风讲解（我的声音）</label>
+        <label class="check"><input id="camera" type="checkbox">加入摄像头小窗</label>
+        <label>摄像头位置<select id="camera-position"><option value="right">右下角</option><option value="left">左下角</option></select></label>
+        <p class="hint">分享整个屏幕不一定能录到会议对方的声音；分享会议标签页并在授权窗口开启“分享标签页音频”通常更可靠。开始后页面会显示实际获得的音轨。录制其他窗口／标签页可避免画面套画面。</p>
+        <div class="row"><button id="start" class="primary">选择屏幕并开始</button><button id="cancel-start" hidden>取消准备</button></div>
+        <p id="capability" class="hint"></p>
+      </section>
+      <div class="studio-main"><section class="panel">
+        <div class="studio-metrics"><div><span id="phase" class="pill">尚未录制</span><p class="hint">有效录制时长</p><strong id="elapsed">00:00</strong></div><div><p class="hint">已录制大小</p><strong id="size">0 MB</strong></div></div>
+        <div id="preview-stage" class="studio-preview-stage"><div class="studio-preview"><p id="placeholder">录制前不会访问屏幕、麦克风或摄像头。</p><video id="preview" playsinline muted hidden></video></div><div id="playback" class="preview-controls" hidden><button id="preview-play">播放</button><label class="preview-seek-label">进度<input id="preview-seek" type="range" min="0" max="1" step="0.01" value="0"></label><span id="preview-time">00:00 / 00:00</span><button id="preview-mute">静音</button><button id="preview-close" hidden>关闭预览</button></div></div>
+        <div class="row studio-panel-actions"><button id="preview-enlarge" disabled>放大预览</button><button id="preview-fullscreen" disabled>全屏预览</button><button id="pause" disabled>暂停录制</button><button id="stop" class="danger" disabled>结束录制</button><button id="download" class="primary" disabled>下载视频</button><button id="clear" disabled>清除预览</button></div>
+        <p class="hint">预览控制栏位于画面外，不遮挡底部。放大预览可按 Esc 退出；全屏不支持时会使用放大窗口。</p>
+        <p id="status" class="status" role="status"></p>
+        <p class="studio-footnote">普通短录单次最多 20 分钟或约 256 MB，先到上限即自动结束；完成后需点击下载。长会议模式需先选本地文件，录制片段持续写入，结束并完成文件保存后才能安全离开。导出采用浏览器支持的 WebM / MP4 格式，不伪装扩展名，也不做云端转码。</p>
+      </section></div>
+    </div>
+    <footer class="footer">画面与声音只留在本机 · 保存后自行保管 · yan-jian.com</footer>
+  </main>
+  <dialog id="preview-dialog" class="preview-dialog" aria-label="视频放大预览"></dialog>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/recorder/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:22 GMT -->
+</html>

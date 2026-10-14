@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/projects/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:14 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="浏览器本地敏捷项目管理：需求待办池、Epic 故事与子任务、Scrum 迭代、自定义工作流、查询批量操作、燃尽报表与完整备份。">
+  <title>本地项目管理台 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="projects3860.css?v=1">
+  <script defer src="projects-model.202610057788.js?v=20261005b"></script>
+  <script defer src="agile-model.2026100613c0.js?v=20261006a"></script>
+  <script defer src="../record-care.20261009.js"></script><script defer src="projects.20261009f6e5.js?v=20261009"></script>
+  <link rel="stylesheet" href="agile.2026100613c0.css?v=20261006a">
+  <script type="module" src="agile.2026100613c0.js?v=20261006a"></script>
+<link rel="stylesheet" href="../ops-upgrade7788.css?v=20261005b"><script src="../ops-models7788.js?v=20261005b"></script><script type="module" src="schedule.202610057788.js?v=20261005b"></script><link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../record-care.20261009.css"><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar">
+    <div class="brand">◈ 本地项目管理台</div>
+    <a href="../index.html">返回在线工具 ↗</a>
+  </header>
+  <main class="workspace">
+    <div class="hero">
+      <div><span class="eyebrow">AGILE PROJECT DESK · LOCAL FIRST</span><h1>从需求到交付，本地推进。</h1><p>借鉴 Jira 的敏捷组织方式，串联需求、迭代、工作流与交付报表，保留项目、排期、版本、工时和知识页。</p></div>
+      <button id="new-issue" class="primary" disabled>＋ 新建任务单</button>
+    </div>
+    <div class="privacy-note">所有项目数据只保存在当前浏览器，不上传本站服务器。无痕窗口、清理网站数据或换设备会使本地记录不可用，请定期下载完整备份。此页不提供真正的多人同步、权限控制或邮件通知。</div>
+    <div class="layout">
+      <aside class="sidebar panel">
+        <div class="side-title"><h2>项目</h2><button id="new-project" aria-label="新建项目">＋</button></div>
+        <input id="project-search" type="search" placeholder="查找项目" aria-label="查找项目">
+        <div id="project-list" class="project-list"></div>
+        <button id="all-projects" class="ghost wide">全部项目概览</button>
+        <details id="data-tools" class="side-bottom" open><summary>示例与数据备份</summary><div class="side-tools"><button id="demo-data" class="ghost wide">载入虚构示例</button><button id="export-backup" class="ghost wide">↓ 导出完整备份</button><label class="button import-button wide">↑ 恢复备份<input id="import-backup" type="file" accept=".json,application/json"></label><p>备份文件可能包含姓名、任务内容与工时，请妥善保管。</p></div></details>
+      </aside>
+      <div class="content">
+        <section class="project-heading panel"><div><span id="project-kicker" class="eyebrow">ALL PROJECTS</span><h2 id="project-title">全部项目</h2><p id="project-description">从左侧选一个项目，或先创建项目。</p></div><div class="heading-actions"><button id="edit-project" class="ghost" hidden>项目设置</button><button id="new-version" class="ghost" hidden>＋ 版本</button></div></section>
+        <nav class="view-tabs" aria-label="项目视图"><button data-view="overview" class="active">概览</button><button data-view="issues">任务单</button><button data-view="board">看板</button><button data-view="timeline">时间线</button><button data-view="calendar">日历</button><button data-view="roadmap">版本路线</button><button data-view="time">工时</button><button data-view="wiki">知识页</button></nav>
+        <div id="view" class="view"></div>
+      </div>
+    </div>
+    <footer class="footer">本地项目管理台 · 数据留在此浏览器 · <a href="../index.html">在线工具</a></footer>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="project-dialog"><form id="project-form"><h2 id="project-dialog-title">新建项目</h2><div class="form-grid"><label>项目名称<input name="name" required maxlength="80" placeholder="例如：网站改版"></label><label>项目代号<input name="key" required maxlength="16" pattern="[A-Za-z0-9-]+" placeholder="例如：WEB"></label><label>父项目<select name="parentId"><option value="">无 · 顶层项目</option></select></label><label>项目状态<select name="status"><option value="active">进行中</option><option value="archived">已归档</option></select></label><label class="span2">项目描述<textarea name="description" rows="3" maxlength="2000" placeholder="目标、范围和交付标准"></textarea></label><label class="span2">项目成员（每行一位，可写“姓名 · 角色”）<textarea name="members" rows="3" maxlength="2000" placeholder="张三 · 负责人&#10;李四 · 开发"></textarea></label><label class="span2">任务分类（逗号分隔）<input name="categories" maxlength="500" placeholder="需求, 缺陷, 运维"></label></div><div class="dialog-actions"><button type="button" data-close>取消</button><button type="submit" class="primary">保存项目</button></div></form></dialog>
+  <dialog id="issue-dialog"><form id="issue-form"><h2 id="issue-dialog-title">新建任务单</h2><p class="dialog-hint">任务编号会自动生成。修改状态、进度或负责人时，活动记录会保留变更。</p><div class="form-grid"><label class="span2">主题<input name="subject" required maxlength="160" placeholder="描述一个具体可交付的事项"></label><label>项目<select name="projectId" required></select></label><label>跟踪类型<select name="tracker"><option value="task">任务</option><option value="feature">需求</option><option value="bug">缺陷</option><option value="support">支持</option></select></label><label>状态<select name="status"><option value="new">新建</option><option value="doing">进行中</option><option value="blocked">受阻</option><option value="resolved">已解决</option><option value="closed">已关闭</option></select></label><label>优先级<select name="priority"><option value="normal">普通</option><option value="low">低</option><option value="high">高</option><option value="urgent">紧急</option></select></label><label>负责人<input name="assignee" maxlength="80" list="member-suggestions" placeholder="可直接输入姓名"></label><datalist id="member-suggestions"></datalist><label>分类<input name="category" maxlength="60" list="category-suggestions" placeholder="可选"></label><datalist id="category-suggestions"></datalist><label>目标版本<select name="versionId"><option value="">未指定</option></select></label><label>上级任务<select name="parentId"><option value="">无</option></select></label><label>开始日期<input name="startDate" type="date"></label><label>截止日期<input name="dueDate" type="date"></label><label>预估工时<input name="estimatedHours" type="number" min="0" max="100000" step="0.25" value="0"></label><label>完成进度 %<input name="doneRatio" type="number" min="0" max="100" step="5" value="0"></label><label class="span2">标签（逗号分隔）<input name="tags" maxlength="300"></label><label class="span2">详细说明<textarea name="description" rows="5" maxlength="10000" placeholder="背景、验收条件、注意事项"></textarea></label></div><div class="dialog-actions"><button type="button" data-close>取消</button><button type="submit" class="primary">保存任务单</button></div></form></dialog>
+  <dialog id="version-dialog"><form id="version-form"><h2 id="version-dialog-title">新建版本</h2><div class="form-grid"><label>版本名称<input name="name" required maxlength="80" placeholder="例如：v1.0"></label><label>计划日期<input name="dueDate" type="date"></label><label>状态<select name="status"><option value="open">计划中</option><option value="locked">已锁定</option><option value="closed">已发布</option></select></label><label class="span2">说明<textarea name="description" rows="3" maxlength="2000"></textarea></label></div><div class="dialog-actions"><button type="button" data-close>取消</button><button type="submit" class="primary">保存版本</button></div></form></dialog>
+  <dialog id="time-dialog"><form id="time-form"><h2>登记工时</h2><div class="form-grid"><label>日期<input name="date" type="date" required></label><label>时长（小时）<input name="hours" type="number" min="0.25" max="24" step="0.25" required></label><label>人员<input name="user" maxlength="80" required></label><label>活动<select name="activity"><option>开发</option><option>设计</option><option>测试</option><option>沟通</option><option>运维</option><option>其他</option></select></label><label class="span2">关联任务<select name="issueId"><option value="">项目级工时</option></select></label><label class="span2">工作说明<textarea name="note" rows="3" maxlength="1000"></textarea></label></div><div class="dialog-actions"><button type="button" data-close>取消</button><button type="submit" class="primary">保存工时</button></div></form></dialog>
+  <dialog id="wiki-dialog"><form id="wiki-form"><h2 id="wiki-dialog-title">新建知识页</h2><div class="form-grid"><label class="span2">标题<input name="title" required maxlength="120"></label><label class="span2">内容（纯文本）<textarea name="body" rows="13" maxlength="30000" placeholder="会议纪要、操作说明、项目约定…"></textarea></label></div><div class="dialog-actions"><button type="button" data-close>取消</button><button type="submit" class="primary">保存知识页</button></div></form></dialog>
+  <dialog id="detail-dialog"><div id="detail-content"></div></dialog>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/projects/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:15 GMT -->
+</html>

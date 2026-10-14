@@ -1,0 +1,63 @@
+.yj-tool-share {
+  width: min(100% - 32px, 1320px);
+  margin: 30px auto 0;
+  padding: 20px 0 4px;
+  border-top: 1px solid var(--line, #dce5ef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted, #667a91);
+  font-size: 14px;
+}
+
+.yj-tool-share__button {
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.yj-tool-share__button:hover {
+  border-color: var(--accent, #2563eb);
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.yj-tool-share__status {
+  min-width: 5em;
+  color: var(--muted, #667a91);
+  font-size: 12px;
+}
+
+body.yj-share-fullscreen-active .yj-tool-share,
+:fullscreen .yj-tool-share,
+:-webkit-full-screen .yj-tool-share {
+  display: none !important;
+}
+
+@media (max-width: 720px) {
+  .yj-tool-share {
+    width: calc(100% - 32px);
+    margin-top: 24px;
+    padding-top: 16px;
+    gap: 9px;
+    font-size: 13px;
+  }
+
+  .yj-tool-share__button {
+    min-height: 40px;
+    padding: 8px 13px;
+  }
+}
+
+@media print {
+  .yj-tool-share {
+    display: none !important;
+  }
+}

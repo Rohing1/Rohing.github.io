@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/serial/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:07 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="浏览器串口调试台：经用户授权连接本机串口设备，查看输出、发送文本或十六进制数据，并手动导出会话记录。">
+  <title>浏览器串口调试台 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="serial3860.css?v=1">
+  <script defer src="serial3860.js?v=1"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>⌁ 浏览器串口调试台</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="intro serial-intro">
+      <div><span class="eyebrow">LOCAL DEVICE / WEB SERIAL</span><h1>接上串口，直接开始排查。</h1><p class="description">连接 USB 转串口线或虚拟串口，查看设备输出；需要时再解锁发送。无需安装网页插件，串口内容不会上传到本站。</p></div>
+      <span id="connection-badge" class="connection-badge" data-state="off">● 未连接</span>
+    </section>
+
+    <div id="support-warning" class="notice warning" role="alert" hidden></div>
+    <div class="notice"><strong>生产设备请谨慎：</strong>错误命令可能修改配置或中断服务。页面默认只读；发送前请核对设备、波特率、命令与变更授权。会话仅在当前页面内存中，刷新或关闭后消失；导出的日志可能包含账号、配置或其他敏感信息。</div>
+
+    <div class="serial-layout">
+      <section class="panel settings-panel" aria-labelledby="settings-heading">
+        <div class="panel-title"><div><span class="section-kicker">01 / CONNECTION</span><h2 id="settings-heading">连接设置</h2></div><span id="port-label" class="port-label">尚未选择设备</span></div>
+        <div class="setting-grid">
+          <label>波特率<input id="baud-rate" type="number" min="1" max="4000000" step="1" value="9600" inputmode="numeric"></label>
+          <label>数据位<select id="data-bits"><option value="8">8 位</option><option value="7">7 位</option></select></label>
+          <label>停止位<select id="stop-bits"><option value="1">1 位</option><option value="2">2 位</option></select></label>
+          <label>校验位<select id="parity"><option value="none">无</option><option value="even">偶校验</option><option value="odd">奇校验</option></select></label>
+          <label>流控<select id="flow-control"><option value="none">无</option><option value="hardware">硬件</option></select></label>
+        </div>
+        <p class="hint">参数必须与设备一致。先在操作系统确认串口驱动已安装，关闭占用该端口的其他软件。</p>
+        <div class="row connection-actions"><button id="connect" class="primary" type="button">选择串口并连接</button><button id="disconnect" type="button" disabled>断开连接</button></div>
+        <p id="connection-message" class="status" role="status" aria-live="polite">等待选择本机串口。</p>
+        <div class="setting-divider"></div>
+        <div class="panel-title compact"><div><span class="section-kicker">02 / SEND</span><h2>发送到设备</h2></div></div>
+        <label class="check unlock-check"><input id="unlock-send" type="checkbox"> 我已核对目标设备与命令，解锁发送</label>
+        <div class="setting-grid send-options"><label>发送格式<select id="send-mode"><option value="text">UTF-8 文本</option><option value="hex">十六进制字节</option></select></label><label>文本行尾<select id="line-ending"><option value="crlf">CRLF（\r\n）</option><option value="lf">LF（\n）</option><option value="cr">CR（\r）</option><option value="none">不添加</option></select></label></div>
+        <label for="send-input">待发送内容</label><textarea id="send-input" rows="4" maxlength="8192" spellcheck="false" autocomplete="off" placeholder="例如：show version"></textarea>
+        <p id="send-hint" class="hint">十六进制模式示例：48 65 6C 6C 6F。发送内容默认不写入会话日志。</p>
+        <div class="row send-actions"><button id="send" class="primary" type="button" disabled>发送</button><label class="check"><input id="record-sent" type="checkbox"> 在日志中记录发送内容</label></div>
+      </section>
+
+      <section class="panel monitor-panel" aria-labelledby="monitor-heading">
+        <div class="panel-title"><div><span class="section-kicker">LIVE / SESSION</span><h2 id="monitor-heading">串口输出</h2></div><div class="session-stats"><span>接收 <strong id="bytes-in">0 B</strong></span><span>发送 <strong id="bytes-out">0 B</strong></span></div></div>
+        <div class="monitor-toolbar"><label>显示格式<select id="view-mode"><option value="text">UTF-8 文本</option><option value="hex">十六进制字节</option></select></label><label class="check"><input id="autoscroll" type="checkbox" checked> 自动滚动</label><span id="buffer-info" class="buffer-info">会话缓冲区为空</span></div>
+        <pre id="terminal" class="terminal" role="log" aria-label="串口会话输出" aria-live="off">连接串口后，设备输出将显示在这里。</pre>
+        <div class="row monitor-actions"><button id="export-txt" type="button" disabled>导出 TXT 日志</button><button id="export-json" type="button" disabled>导出 JSON 日志</button><button id="clear-log" type="button" disabled>清空显示</button></div>
+        <p class="hint">最多保留最近约 1 MiB 的接收数据或 2,000 条片段，超出后自动丢弃较早片段。导出仅包含当前缓冲区；不要将敏感会话日志上传到公开平台。</p>
+      </section>
+    </div>
+    <p class="footer">仅在本机浏览器中连接串口 · 不自动保存会话 · 请使用 HTTPS 与支持 Web Serial 的浏览器</p>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/serial/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:07 GMT -->
+</html>

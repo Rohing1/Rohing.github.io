@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /file/
+Allow: /file/software/
+Sitemap: https://yan-jian.com/sitemap.xml

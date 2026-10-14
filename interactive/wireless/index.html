@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/wireless/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:40:52 GMT -->
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在本地浏览器规划无线 AP、墙体、覆盖与漫游路线；支持 Cisco、华为、华三参考机型。">
+  <title>无线覆盖与漫游沙盘 · 在线工具</title>
+  <link rel="stylesheet" href="../common.css"><link rel="stylesheet" href="wireless.css"><link rel="stylesheet" href="../scenario-compare.20261010.css">
+  <script defer src="../scenario-compare.20261010.js"></script><script defer src="wireless-model.js"></script><script defer src="wireless0842.js?v=20261010-ab"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong class="brand">yan-jian.com · 在线工具</strong><a href="../index.html">返回工具总览 ↗</a></header>
+  <main class="shell">
+    <div class="intro"><div><p class="eyebrow">WIRELESS PLANNING · LOCAL SANDBOX</p><h1>无线覆盖与漫游沙盘</h1><p class="description">摆放 AP、绘制隔墙，比较 2.4 / 5 GHz 覆盖、同频风险与演示漫游路线。内置思科、华为、华三共 10 款室内及室外 AP 参考模板。</p></div><span class="local-chip">◉ 纯本地计算 · 不上传图纸</span></div>
+    <div class="notice"><strong>规划预演，不是现场勘测。</strong> 模型发射功率、墙体衰减、噪声底和传播指数均为可编辑示例值；热力图与漫游结果仅用于比较方案。真实设计需现场勘测、法规核验与终端实测。方案自动保存在当前浏览器，仍请定期下载完整 JSON 备份。</div>
+    <section class="setup panel" aria-label="方案设置">
+      <div class="setup-grid">
+        <label>示例场景<select id="scenario"><option value="office">开放办公</option><option value="rooms">多房间</option><option value="corridor">长走廊</option><option value="dense">高密会议</option><option value="outdoor">室外广场</option><option value="blank">空白方案</option></select></label>
+        <label>新增 AP 参考机型<select id="profile"></select></label>
+        <label>横向尺寸（米）<input id="widthM" type="number" min="5" max="200" step="1"></label>
+        <label>纵向尺寸（米）<input id="heightM" type="number" min="5" max="200" step="1"></label>
+        <label>观察频段<select id="band"><option value="5">5 GHz</option><option value="2.4">2.4 GHz</option></select></label>
+        <label>显示指标<select id="view"><option value="rssi">信号强度 RSSI</option><option value="snr">信噪比 SNR</option><option value="interference">同频覆盖风险</option></select></label>
+      </div>
+      <p id="profileHint" class="hint" aria-live="polite"></p>
+      <div class="setup-actions"><label class="button file-button">导入本地平面图<input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp"></label><button id="clearImage">移除图纸</button><button id="exportJson">导出方案 JSON</button><label class="button file-button">恢复方案 JSON<input id="importJson" type="file" accept="application/json,.json"></label><button id="exportPng">下载当前视图 PNG</button></div>
+      <p class="hint">平面图只保存在当前浏览器，不自动上传。浏览器数据清理可能删除方案；导出 JSON / PNG 会将图纸一并写入下载文件，请妥善保管。场景切换会替换当前布局，建议先导出备份。</p>
+    </section>
+    <section class="workspace">
+      <div class="board panel">
+        <div class="board-head"><div><h2>方案平面图</h2><p id="modeHint" class="hint">拖动 AP 调整位置，点击空白处查看信号。</p></div><div class="row"><label class="check"><input id="showHeat" type="checkbox" checked> 热力图</label><label class="check"><input id="showRadius" type="checkbox" checked> 参考半径</label><label class="check"><input id="showGrid" type="checkbox" checked> 网格</label><label class="check"><input id="showLabels" type="checkbox" checked> 标签</label></div></div>
+        <div class="toolstrip" role="toolbar" aria-label="绘图工具"><button data-tool="select" class="active" aria-pressed="true">选择 / 探针</button><button data-tool="ap" aria-pressed="false">＋ 放置 AP</button><button data-tool="wall" aria-pressed="false">╱ 绘制隔墙</button><button data-tool="route" aria-pressed="false">⌁ 漫游路径</button><label>墙体类型<select id="wallType"><option value="drywall">轻质隔墙</option><option value="glass">玻璃</option><option value="concrete">混凝土</option><option value="metal">金属隔断</option></select></label><button id="deleteSelected" class="danger" disabled>删除选中</button><button id="clearRoute">清空路径</button></div>
+        <div id="stage" class="stage" aria-label="可交互无线规划画布"><img id="floorplan" alt="用户导入的本地平面图" hidden><canvas id="heatmap"></canvas><canvas id="overlay"></canvas></div>
+        <div class="legend"><span>RSSI <i class="scale"></i> 弱 → 强</span><span id="legendNote">虚线圈是可调规划参考半径，不参与热力图计算。</span></div>
+      </div>
+      <aside class="sidebar">
+        <section class="panel"><h2>覆盖摘要 <small id="summaryBand">5 GHz</small></h2><div class="metrics"><div><b id="covered">—</b><span>门限覆盖</span></div><div><b id="overlap">—</b><span>双 AP 覆盖</span></div><div><b id="apCount">—</b><span>AP / 隔墙</span></div><div><b id="channelCount">—</b><span>近邻同频对</span></div></div><p id="signalRange" class="hint"></p><div id="advice" class="advice"></div></section>
+        <section class="panel"><h2>参数与阈值</h2><div class="fields"><label>覆盖门限 RSSI（dBm）<input id="threshold" type="number" min="-95" max="-40" step="1"></label><label>环境噪声底（dBm）<input id="noise" type="number" min="-110" max="-60" step="1"></label><label>室内路径损耗指数<input id="exponent" type="number" min="2" max="4" step="0.1"></label><label>演示切换滞后（dB）<input id="hysteresis" type="number" min="0" max="15" step="1"></label></div><p class="hint">墙体示例衰减：轻质 / 玻璃 4/7 dB、混凝土 10/15 dB、金属 25/30 dB（2.4/5 GHz）。受厚度、材质与环境影响，不能直接作为验收值。</p></section>
+        <section class="panel"><h2 id="detailTitle">点选 AP 或平面图</h2><label>从列表选择 AP（触屏或键盘均可）<select id="apSelector" aria-label="选择要编辑的 AP"><option value="">未选择 AP</option></select></label><div id="detail" class="detail muted">选中 AP 后可修改名称、机型、射频模式、信道、带宽和发射等效辐射功率；点击空白处可测算该点的信号。</div></section>
+        <section class="panel"><h2>漫游路径</h2><div id="roamSummary" class="hint">在地图上选择“漫游路径”，按经过顺序点击至少两个点。</div><ol id="handoffs" class="handoffs"></ol><p class="hint">终端决定实际漫游；此处仅用信号强度与滞后量做示意，不模拟 802.11k/v/r 或厂商控制器决策。</p></section>
+      </aside>
+    </section>
+    <section class="panel sources"><h2>参考机型与资料</h2><p class="hint">机型仅用于射频数量和频段示例；17 dBm 是沙盘统一初始演示值，并非厂商标称功率或合规配置。规划圈默认室内 20 m，参考<a href="https://www.h3c.com/cn/d_202304/1831706_30005_0.htm" target="_blank" rel="noopener noreferrer">新华三分场景部署经验值 ↗</a>；室外 40 m 只是可修改的试算起点，不是三家厂商的标准保证值。墙体、天线方向图、场地和终端会影响实际覆盖。具体地区、天线、固件与控制器配置请核对官方文档。</p><div id="profileSources" class="source-grid"></div><p class="hint">预测热力图的局限与场勘方法：<a href="https://www.cisco.com/c/en/us/support/docs/wireless/5500-series-wireless-controllers/116057-site-survey-guidelines-wlan-00.html" target="_blank" rel="noopener noreferrer">Cisco 无线现场勘测指南 ↗</a>。所有示例场景均为虚构布局，不含用户图纸或现网数据。</p></section>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/wireless/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:40:53 GMT -->
+</html>

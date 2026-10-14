@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/packets/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:07 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="抓包文件速读台：在本地浏览器分析 PCAP/PCAPNG，查看协议、会话、时间线与异常线索。文件不上传。">
+  <title>抓包文件速读台 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="packets3860.css?v=1">
+  <script defer src="packets3860.js?v=1"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>◈ 抓包文件速读台</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="intro"><div><span class="eyebrow">LOCAL CAPTURE / PCAP READER</span><h1>把抓包，读成线索。</h1><p class="description">从协议、会话到单个数据包，沿时间线快速浏览。适合先定位问题范围，再交给专业抓包工具深挖。</p></div><span class="local-badge">◉ 只在本机解析</span></section>
+    <div class="privacy-note"><strong>隐私与边界：</strong>选中的文件只在当前浏览器内存中解析，不上传、不自动保存。抓包可能包含地址、域名、访问路径甚至明文凭据，请勿随意分享。这里只识别常见协议，不替代 Wireshark；“重传候选”等是线索，不是故障结论。</div>
+    <section class="panel import-panel" aria-labelledby="import-title">
+      <div class="import-head"><div><span class="section-kicker">01 / IMPORT</span><h2 id="import-title">选择抓包文件</h2><p class="hint">支持 PCAP、PCAPNG。单文件最多 128 MiB，最多分析前 75,000 个包；较大文件建议先截取问题时段。</p></div><button id="demo" type="button">加载演示样本</button></div>
+      <div id="dropzone" class="dropzone"><div class="drop-icon">↥</div><strong>拖放文件到这里</strong><span>或点击选择本机文件</span><input id="file" type="file" accept=".pcap,.pcapng,.cap,application/vnd.tcpdump.pcap" aria-label="选择 PCAP 或 PCAPNG 文件"></div>
+      <div class="import-foot"><span id="file-label">尚未载入文件</span><button id="clear" type="button" disabled>清除当前结果</button></div>
+      <p id="status" class="status" role="status" aria-live="polite">等待读取本地文件。</p>
+    </section>
+    <div id="results" hidden>
+      <section class="metrics" aria-label="抓包概况"><div class="metric"><span>数据包</span><strong id="metric-packets">0</strong><small id="metric-format">—</small></div><div class="metric"><span>总流量</span><strong id="metric-bytes">0 B</strong><small>原始包长度之和</small></div><div class="metric"><span>会话</span><strong id="metric-sessions">0</strong><small>按双向端点归并</small></div><div class="metric accent"><span>排查线索</span><strong id="metric-findings">0</strong><small>只展示前 100 条</small></div></section>
+      <div id="warnings" class="warnings" hidden></div>
+      <div class="overview-grid">
+        <section class="panel" aria-labelledby="timeline-title"><span class="section-kicker">02 / TIMELINE</span><h2 id="timeline-title">流量时间线</h2><div id="timeline" class="timeline" role="img" aria-label="抓包每时间段的数据包数量"></div><p id="time-range" class="hint">—</p></section>
+        <section class="panel" aria-labelledby="protocol-title"><span class="section-kicker">03 / PROTOCOLS</span><h2 id="protocol-title">协议分布</h2><div id="protocols" class="protocols"></div></section>
+      </div>
+      <div class="overview-grid lower">
+        <section class="panel" aria-labelledby="findings-title"><div class="section-heading"><div><span class="section-kicker">04 / CLUES</span><h2 id="findings-title">优先查看</h2></div><span id="findings-count" class="mini-count"></span></div><p class="hint">RST、DNS 错误、相同序号的重传候选，以及抓包中未见回复的 DNS 查询。采集不完整时可能出现误报。</p><div id="findings" class="finding-list"></div></section>
+        <section class="panel" aria-labelledby="sessions-title"><div class="section-heading"><div><span class="section-kicker">05 / CONVERSATIONS</span><h2 id="sessions-title">主要会话</h2></div><span class="mini-count">按流量排序</span></div><div id="sessions" class="session-list"></div></section>
+      </div>
+      <section class="panel packet-panel" aria-labelledby="packets-title"><div class="section-heading"><div><span class="section-kicker">06 / PACKETS</span><h2 id="packets-title">数据包列表</h2></div><span id="filter-count" class="mini-count"></span></div><div class="filter-bar"><label>搜索地址、端口或摘要<input id="search" type="search" placeholder="例如：8.8.8.8、DNS、RST" autocomplete="off"></label><label>协议<select id="protocol-filter"><option value="">全部协议</option></select></label><label class="check"><input id="clues-only" type="checkbox"> 只看线索包</label></div><div class="table-wrap"><table><thead><tr><th>#</th><th>时间</th><th>来源</th><th>目标</th><th>协议</th><th>长度</th><th>摘要 / 线索</th></tr></thead><tbody id="packet-rows"></tbody></table></div><div class="pager"><button id="previous" type="button">上一页</button><span id="page-label">—</span><button id="next" type="button">下一页</button></div></section>
+    </div>
+    <p class="footer">只解析用户主动选择的文件 · 不联网抓包 · 加密流量不解密 · 无持久化存储</p>
+  </main>
+  <dialog id="detail"><div class="detail-head"><div><span class="section-kicker">PACKET DETAIL</span><h2 id="detail-title">数据包</h2></div><button id="close-detail" type="button" aria-label="关闭详情">✕</button></div><dl id="detail-fields"></dl><h3>前 80 字节（十六进制）</h3><pre id="detail-hex"></pre><p class="hint">这里只显示包头附近的原始字节，可能仍包含敏感内容。</p></dialog>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/packets/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:08 GMT -->
+</html>

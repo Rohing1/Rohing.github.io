@@ -1,0 +1,34 @@
+/* Keep empty grid tracks: two racks must not stretch into half-screen cards. */
+.pan-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr))}
+.panorama:fullscreen .pan-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr))}
+.pan-density{display:flex;gap:0;flex:none}
+.pan-density button{border-radius:0;min-height:36px;padding:6px 10px}
+.pan-density button:first-child{border-radius:8px 0 0 8px}
+.pan-density button:last-child{border-radius:0 8px 8px 0}
+.pan-density button[aria-pressed=true]{background:#153b4d;border-color:#30978a;color:#8ff4d9}
+.pan-help{font-size:12px;color:#9fcee7;margin:8px 0 14px}
+.pan-help summary{cursor:pointer;width:fit-content}
+.pan-help p{margin:8px 0;line-height:1.5}
+.panorama.pan-compact{padding:20px}
+.panorama.pan-compact:fullscreen{padding:20px 24px}
+.pan-compact .pan-header{gap:12px;align-items:center}
+.pan-compact .pan-header h2{font-size:24px;margin:5px 0}
+.pan-compact .pan-filter{margin:12px 0 8px;gap:16px;align-items:center}
+.pan-compact .pan-filter label{max-width:320px;min-width:180px}
+.pan-compact .pan-filter input{padding:8px 12px}
+.pan-compact .pan-legend{gap:12px}
+.pan-compact .pan-caption{margin:0;font-size:12px}
+.pan-compact .pan-help{margin:4px 0 14px}
+.pan-compact .pan-grid{gap:14px}
+.pan-compact .pan-card{min-height:174px;padding:14px;gap:12px;border-radius:12px}
+.pan-compact .pan-card-head{gap:8px}
+.pan-compact .pan-name strong{font-size:15px}
+.pan-compact .pan-name small{margin-top:5px}
+.pan-compact .pan-visual{gap:9px}
+.pan-compact .pan-ring{width:44px;height:44px}
+.pan-compact .pan-ring span{width:34px;height:34px;font-size:12px}
+.pan-compact .pan-beacon-unit{min-width:32px;gap:6px}
+.pan-compact .pan-counts{gap:12px}
+.pan-compact .pan-footer{padding-top:16px}
+@media(min-width:2200px){.pan-compact .pan-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:640px){.panorama.pan-compact,.panorama.pan-compact:fullscreen{padding:16px 12px}.pan-grid,.panorama:fullscreen .pan-grid{grid-template-columns:1fr}.pan-compact .pan-filter{gap:12px}.pan-compact .pan-filter label{flex-basis:100%;max-width:none}.pan-compact .pan-caption{width:100%}.pan-compact .pan-header{align-items:flex-start}.pan-actions{gap:8px}.pan-actions button{min-height:38px}.pan-compact .pan-grid{gap:12px}}

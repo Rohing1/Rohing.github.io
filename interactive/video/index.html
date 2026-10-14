@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/video/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:22 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>本地视频快剪 · yan-jian.com</title>
+  <meta name="description" content="在浏览器本地截取 MP4 或 WebM 视频片段、移除声音并提取封面。文件不上传，支持直接写入本地文件以处理较大的素材。">
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="../studio.20260927.css">
+  <link rel="stylesheet" href="video.20260929.css">
+  <script defer src="video.20260929322c.js?v=20261005c"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><script defer src="../media-workflow.20261005f6e5.js?v=20261009"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><div class="brand">▣ 本地视频快剪</div><a href="../../index.html">返回文章网站 ↗</a></header>
+  <main class="shell">
+    <section class="intro"><div><span class="eyebrow">Local video · Quick trim</span><h1>留下需要的片段。</h1><p class="description">截取视频、移除声音、保存封面。只读取本地文件，不上传素材；剪切优先复制原有视频数据，不重新压缩画质。</p></div><span class="studio-badge">无需登录 · 本地处理</span></section>
+    <div class="studio-warning">请确认素材有使用权并避免选入敏感内容。快剪按视频关键帧对齐，实际起止可能与所选时间相差数秒；需要逐帧精确剪辑或复杂特效时，请使用桌面剪辑软件。处理过程中不要关闭页面。</div>
+    <div class="studio-grid">
+      <section class="panel studio-card stack" aria-label="快剪设置">
+        <h2>素材与剪切</h2>
+        <label class="video-file button" for="source">＋ 选择本地视频<input id="source" type="file" accept="video/mp4,video/webm,.mp4,.webm,.mov" aria-label="选择本地视频"></label>
+        <p id="file-info" class="hint">支持常见 MP4、WebM；能否快剪还取决于视频内部编码。不会读取整段视频到内存。</p>
+        <div class="grid2">
+          <label>开始时间（秒）<input id="start-time" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+          <label>结束时间（秒）<input id="end-time" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+        </div>
+        <div class="row"><button id="mark-start" type="button" disabled>用当前画面设为开始</button><button id="mark-end" type="button" disabled>用当前画面设为结束</button></div>
+        <label class="check"><input id="mute" type="checkbox">移除声音（输出静音视频）</label>
+        <label>保存方式<select id="save-mode"><option value="file">直接保存到本地文件（推荐大文件）</option><option value="download">完成后下载（仅限短片段）</option></select></label>
+        <p id="save-hint" class="hint">桌面版 Chrome / Edge 可直接写入所选位置，避免把成品全部暂存在浏览器内存中。</p>
+        <div class="row"><button id="export" class="primary" type="button" disabled>剪切并保存</button><button id="cancel" type="button" hidden>取消处理</button></div>
+        <div class="video-progress" id="progress-wrap" hidden><progress id="progress" max="100" value="0"></progress><span id="progress-label">0%</span></div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </section>
+      <div class="studio-main">
+        <section class="panel">
+          <div class="video-panel-head"><div><h2>画面预览</h2><p class="hint">拖动视频进度，决定截取位置；预览播放不会修改源文件。</p></div><span id="duration-chip" class="pill" hidden></span></div>
+          <div class="studio-preview video-stage"><p id="placeholder">选择本地视频后，在这里预览。</p><video id="preview" controls playsinline preload="metadata" hidden></video></div>
+          <div class="video-preview-actions row"><button id="capture" type="button" disabled>提取当前画面为 PNG 封面</button><span id="playhead" class="hint">当前 00:00</span></div>
+        </section>
+        <section class="panel video-notes"><h2>大文件处理说明</h2><div class="video-note-grid"><div><strong>大源文件</strong><p>按需读取源文件中的片段，不使用整文件上传或整文件解码；仍受浏览器与磁盘能力限制。</p></div><div><strong>大输出文件</strong><p>请选择“直接保存到本地文件”。普通下载模式只允许预计不超过 60 MB 的短片段。</p></div><div><strong>不支持的素材</strong><p>浏览器无法复制该编码、视频轨缺失或文件损坏时，会停止并提示，不会暗中转码或卡住页面。</p></div></div></section>
+      </div>
+    </div>
+    <footer class="footer">源视频与成品均留在本机 · 不上传、不自动保存视频 · yan-jian.com</footer>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/video/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:23 GMT -->
+</html>

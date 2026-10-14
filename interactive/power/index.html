@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/power/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:03 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在浏览器本地估算机房 IT 负载、UPS 容量与续航、供电冗余、市电需求和制冷显冷量。仅用于方案预估，不代替电气及暖通设计。">
+  <title>机房供配电与制冷规划沙盘 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="powerc401.css?v=20261001a">
+  <link rel="stylesheet" href="../scenario-compare.20261010.css">
+  <script defer src="../scenario-compare.20261010.js"></script>
+  <script type="module" src="power0842.js?v=20261010-ab"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>⚡ 机房供配电与制冷规划</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="hero">
+      <div><span class="eyebrow">DATA ROOM · POWER + COOLING PLANNER</span><h1>从设备功耗，推演整间机房。</h1><p>把 IT 负载、UPS、电池、市电和空调放在同一张方案里。调整一项参数，立即看到上下游容量如何变化。</p></div>
+      <div class="hero-mark" aria-hidden="true"><span>IT</span><i>→</i><span>UPS</span><i>→</i><span>市电</span><small>热量 → 制冷 → 用电</small></div>
+    </section>
+    <div class="safety"><strong>仅供前期方案比选。</strong> 结果是简化稳态估算，不代替有资质人员的供配电、暖通、消防及建筑设计；不能直接据此选断路器、线缆、电池节数或采购设备。实际峰值、启动电流、电池放电曲线、环境条件和当地规范必须复核。</div>
+    <div class="toolbar"><span id="save-state" role="status">方案仅保存在当前浏览器</span><div><button id="export" type="button">导出完整备份</button><label class="button import-button">恢复备份<input id="import" type="file" accept=".json,application/json" aria-label="恢复机房供配电与制冷规划备份"></label><button id="print" type="button">打印方案</button><button id="reset" type="button">恢复示例</button></div></div>
+    <div class="layout">
+      <section class="controls" aria-label="规划参数">
+        <div class="panel section-card"><div class="section-heading"><span class="step">01</span><div><h2>IT 设备负载</h2><p>填单台设计峰值功率，不要将电源铭牌额定值与实测功耗混为一谈。</p></div></div>
+          <div class="group-head"><span>设备组</span><span>数量</span><span>单台峰值 W</span><span></span></div><div id="groups" class="groups"></div>
+          <button id="add-group" type="button" class="subtle">＋ 添加设备组</button>
+          <div class="field-grid"><label>未来扩容余量 %<input data-field="growthPct" type="number" min="0" max="300" step="1" inputmode="decimal"><small>加入 IT 设计峰值，不代表当前平均耗电</small></label><label>平均运行负载占当前装机峰值 %<input data-field="averageITPct" type="number" min="0" max="100" step="1" inputmode="decimal"><small>仅用于月电量情景估算</small></label></div>
+        </div>
+        <div class="panel section-card"><div class="section-heading"><span class="step">02</span><div><h2>UPS 与电池</h2><p>把需不断电的负载与非 UPS 负载分开。N+1 是模块假设；2N 是两套独立系统。</p></div></div>
+          <div class="field-grid"><label>IT 负载由 UPS 保护 %<input data-field="protectedPct" type="number" min="0" max="100" step="1" inputmode="decimal"></label><label>UPS 保护的其他负载 kW<input data-field="upsAuxKW" type="number" min="0" max="100000" step="0.1" inputmode="decimal"><small>如控制系统；不要重复填写 IT 或制冷</small></label>
+          <label>目标 UPS 装载率 %<input data-field="upsTargetPct" type="number" min="30" max="100" step="1" inputmode="decimal"></label><label>拟选 UPS 额定输出功率因数<input data-field="upsPowerFactor" type="number" min="0.5" max="1" step="0.01" inputmode="decimal"><small>用于 kW → kVA；以型号铭牌为准</small></label>
+          <label>UPS AC-AC 效率 %<input data-field="upsEfficiencyPct" type="number" min="50" max="100" step="0.1" inputmode="decimal"><small>估算市电输入损耗</small></label><label>UPS 架构<select data-field="upsTopology"><option value="n">N · 单系统</option><option value="n1">N+1 · 模块冗余</option><option value="2n">2N · 双独立系统</option></select></label>
+          <label id="module-field">单模块额定容量 kVA<input data-field="upsModuleKVA" type="number" min="1" max="10000" step="1" inputmode="decimal"><small>N+1 按失去一模块后仍可承担设计负载推算</small></label><label>目标电池续航 min<input data-field="runtimeMin" type="number" min="1" max="480" step="1" inputmode="decimal"></label>
+          <label>电池可用容量比例 %<input data-field="batteryUsablePct" type="number" min="10" max="100" step="1" inputmode="decimal"></label><label>寿命末期容量保留 %<input data-field="batteryAgingPct" type="number" min="10" max="100" step="1" inputmode="decimal"></label>
+          <label>电池至交流输出效率 %<input data-field="batteryInverterPct" type="number" min="50" max="100" step="1" inputmode="decimal"></label><label>拟配置单路电池标称容量 kWh<input data-field="batteryInstalledKWh" type="number" min="0" max="1000000" step="0.1" inputmode="decimal"><small>填 0 则只显示所需容量</small></label></div>
+          <p class="mini-note">电池能量公式仅用于量级对比；高倍率放电、温度、截止电压、串并联与 BMS 限制未建模。2N 时每路电池都按独立承担全部关键负载估算。</p>
+        </div>
+        <div class="panel section-card"><div class="section-heading"><span class="step">03</span><div><h2>制冷与热负荷</h2><p>将 IT 电功率近似视为机房热负荷，再加入围护结构、照明或其他室内热源。</p></div></div>
+          <div class="field-grid"><label>其他室内显热 kW<input data-field="roomHeatKW" type="number" min="0" max="100000" step="0.1" inputmode="decimal"><small>未在 IT 负载中计算的人员、照明、围护等</small></label><label>制冷容量余量 %<input data-field="coolingReservePct" type="number" min="0" max="100" step="1" inputmode="decimal"></label>
+          <label>制冷系统情景 COP<input data-field="coolingCOP" type="number" min="1" max="10" step="0.1" inputmode="decimal"><small>供冷量 ÷ 用电量；非单台机组保证值</small></label><label>单台设计工况可用显冷量 kW<input data-field="coolingUnitKW" type="number" min="0.1" max="100000" step="0.1" inputmode="decimal"><small>不能直接拿名义总冷量代替显冷量</small></label>
+          <label>制冷冗余<select data-field="coolingRedundancy"><option value="n">N · 不加备用机</option><option value="n1">N+1 · 多一台备用机</option></select></label><label>制冷用电由 UPS 保护 %<input data-field="coolingOnUPSPct" type="number" min="0" max="100" step="1" inputmode="decimal"><small>仅估算电功率；真实启动冲击另核</small></label></div>
+          <p class="mini-note">机房内的照明等辅助用电既产生电费，也可能形成室内热负荷；两处分别记电和热，不是重复计算电功率。机房外的损耗则不要填入室内热源。本页不计算风量、冷热通道、潜热、湿度或极端工况；精密空调须核对设计工况显热比。</p>
+        </div>
+        <div class="panel section-card"><div class="section-heading"><span class="step">04</span><div><h2>市电、配电与费用</h2><p>双路按每路均能承担故障切换后的全部负载规划；装机容量不能与实际耗电相加。</p></div></div>
+          <div class="field-grid"><label>其他非 UPS 用电 kW<input data-field="directAuxKW" type="number" min="0" max="100000" step="0.1" inputmode="decimal"><small>如照明、安防、非关键辅机；避免重复</small></label><label>上游配电损耗占进线 %<input data-field="distributionLossPct" type="number" min="0" max="30" step="0.1" inputmode="decimal"></label>
+          <label>三相线电压 V<input data-field="voltage" type="number" min="200" max="1000" step="1" inputmode="decimal"></label><label>市电综合功率因数<input data-field="utilityPowerFactor" type="number" min="0.5" max="1" step="0.01" inputmode="decimal"></label>
+          <label>进线/变压器目标装载率 %<input data-field="utilityTargetPct" type="number" min="30" max="100" step="1" inputmode="decimal"></label><label>供电路径<select data-field="utilityMode"><option value="single">单路</option><option value="dual">A/B 双路独立</option></select></label>
+          <label>拟配置单路额定容量 kVA<input data-field="utilityInstalledKVA" type="number" min="0" max="1000000" step="1" inputmode="decimal"><small>填 0 则只显示最低规划容量</small></label><label>电价 元/kWh<input data-field="electricityPrice" type="number" min="0" max="100" step="0.01" inputmode="decimal"><small>用于 30 天、每日 24 小时的情景估算</small></label>
+          <label>备用发电机标称容量 kVA<input data-field="generatorRatedKVA" type="number" min="0" max="1000000" step="1" inputmode="decimal"><small>选填；填 0 表示暂不比较</small></label><label>发电机额定功率因数<input data-field="generatorPowerFactor" type="number" min="0.5" max="1" step="0.01" inputmode="decimal"><small>仅作有功容量基线比较</small></label>
+          <label>备用电源预期切换时间 秒<input data-field="generatorTransferSec" type="number" min="0" max="3600" step="1" inputmode="decimal"><small>填 0 表示暂不推演切换</small></label></div>
+          <p class="mini-note">发电机比较只按稳态峰值有功功率，不包含电机启动冲击、负载阶跃、海拔/温度降额、谐波或油机厂家允许的带载方式；不得据此直接定型。</p>
+        </div>
+      </section>
+      <aside class="results" id="results" aria-label="即时规划结果">
+        <section class="panel summary"><div class="result-head"><span class="eyebrow">LIVE SCENARIO</span><h2>方案总览</h2><p id="result-summary"></p></div><div class="metrics">
+          <div class="metric"><span>IT 设计峰值</span><strong id="it-peak">—</strong><small>含未来扩容余量</small></div>
+          <div class="metric"><span>单路 UPS 规划下限</span><strong id="ups-size">—</strong><small>按目标装载率与额定功率因数</small></div>
+          <div class="metric"><span>制冷所需显冷量</span><strong id="cooling-size">—</strong><small id="cooling-ton">—</small></div>
+          <div class="metric"><span>单路市电/变压器规划</span><strong id="utility-size">—</strong><small id="utility-current">—</small></div>
+        </div></section>
+        <section class="panel result-panel"><h2>电从哪里走</h2><div class="flow"><span>市电进线</span><b>→</b><span>UPS / 直供</span><b>→</b><span>IT + 制冷</span></div><div id="power-bar" class="power-bar" aria-label="总市电峰值功率构成"></div><div id="power-legend" class="legend"></div><p id="peak-detail" class="result-note"></p></section>
+        <section class="panel result-panel"><h2>冗余与续航</h2><dl class="result-list"><div><dt>UPS 架构与装机</dt><dd id="ups-topology">—</dd></div><div><dt>单路电池标称需求</dt><dd id="battery-size">—</dd></div><div><dt>制冷机组配置</dt><dd id="cooling-units">—</dd></div><div><dt>市电路径</dt><dd id="utility-feeds">—</dd></div><div><dt>备用发电机稳态基线</dt><dd id="generator-base">—</dd></div></dl><p id="runtime-detail" class="result-note"></p></section>
+        <section class="panel result-panel"><h2>月度用电情景</h2><div class="cost"><strong id="monthly-kwh">—</strong><span id="monthly-cost">—</span></div><p id="average-detail" class="result-note"></p><p class="result-note">这是按假设负载和恒定 COP 推算的 30 天电量，不是实测 PUE，也不含需量电费、税费或季节变化。</p></section>
+        <section class="panel checks"><h2>需要复核</h2><ul id="warnings"></ul><p>单线图、短路电流、选择性保护、接地、防雷、谐波、发电机启动、空调启动电流、气流组织与消防联动均不在本计算模型内。</p></section>
+      </aside>
+    </div>
+    <section class="panel methods"><h2>计算口径与参考</h2><div class="method-grid"><div><h3>UPS / 电池</h3><p>UPS 单路下限 = UPS 输出负载 ÷ 目标装载率 ÷ UPS 额定输出功率因数。电池标称能量 = 负载 × 续航时长 ÷ 可用比例 ÷ 寿命保留 ÷ 放电至交流效率。实际续航必须参考厂商放电曲线。</p></div><div><h3>制冷 / 市电 / 油机</h3><p>设计显冷量 = (IT 峰值 + 其他室内显热) × (1 + 制冷余量)。制冷电功率 = 显冷量 ÷ 情景 COP。市电峰值包含 UPS 输入、直供负载与配电损耗；三相电流按平衡负载估算。发电机稳态 kVA 基线取“峰值 kW ÷ 机组额定功率因数”与“峰值 kW ÷ 负载功率因数”的较大值。</p></div></div><p class="sources">参考资料：<a href="https://www.se.com/us/en/faqs/FAQ000268376/" target="_blank" rel="noopener noreferrer">施耐德 UPS 选型提示</a> · <a href="https://www.se.com/us/en/faqs/FA101600/" target="_blank" rel="noopener noreferrer">施耐德三相 kVA 计算</a> · <a href="https://www.energy.gov/cmei/femp/articles/best-practices-guide-energy-efficient-data-center-design" target="_blank" rel="noopener noreferrer">美国能源部数据中心设计指南</a> · <a href="https://www.thegreengrid.org/resources/glossary?combine=pue" target="_blank" rel="noopener noreferrer">The Green Grid PUE 定义</a>。页面不自动访问这些网站，只有点击链接才会离开本站。</p></section>
+    <p class="footer">本地规划 · 不连接真实供配电设备 · 请保存备份并交由专业人员复核</p>
+  </main>
+  <a class="mobile-dock" href="#results" aria-label="查看即时规划结果"><span>IT <b id="dock-it">—</b></span><span>UPS <b id="dock-ups">—</b></span><span>市电 <b id="dock-utility">—</b></span><strong>结果 ↑</strong></a>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/power/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:03 GMT -->
+</html>

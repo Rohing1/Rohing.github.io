@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/redact/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:23 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在浏览器本地给视频添加实心遮挡、模糊、马赛克和文字箭头标注；预览并导出处理结果，不上传视频。">
+  <title>视频画面脱敏与标注台 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="../media-suite.20261002.css">
+  <script type="module" src="redact322c.js?v=20261005c"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><script defer src="../media-workflow.20261005f6e5.js?v=20261009"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>视频画面脱敏与标注台</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell media-shell">
+    <section class="media-hero"><div><span class="eyebrow">LOCAL VIDEO PRIVACY / ANNOTATION</span><h1>分享录屏前，先处理画面里的敏感内容。</h1><p>在视频上画出遮挡区域或添加标注，设定出现时间，预览后在本机导出处理结果。</p></div><span class="media-hero-mark" aria-hidden="true">▣</span></section>
+    <div class="media-notice"><strong>隐私边界：</strong>处理只在当前浏览器进行，不上传源视频；区域设置会保存在本机浏览器，视频文件不会保存。实心遮挡才适合隐藏密码、账号等敏感信息。模糊/马赛克不保证不可还原；静态区域不会自动跟踪移动对象，导出后务必从头到尾复核画面和声音。</div>
+    <div class="media-actions"><label class="button primary media-file-button">选择本地视频<input id="video-file" type="file" accept="video/*,.mp4,.webm,.mov" aria-label="选择本地视频"></label><button id="backup" type="button">导出区域备份</button><label class="button media-file-button">恢复区域备份<input id="restore" type="file" accept=".json,application/json" aria-label="恢复区域备份"></label><span id="video-info" class="hint">尚未选择视频</span></div>
+    <div class="media-grid">
+      <section class="panel media-preview-panel"><div class="media-panel-head"><div><h2>画面预览</h2><p class="hint">选一个工具，在画面上拖拽画出区域；时间范围可在右侧修改。</p></div><span id="live-time" class="media-chip">00:00:00 / 00:00:00</span></div><div id="stage" class="redact-stage"><video id="source-video" playsinline preload="metadata"></video><canvas id="canvas" width="960" height="540" aria-label="视频处理预览；拖拽可添加选中的区域"></canvas><div class="redact-placeholder">选择本地视频后，在画面上拖拽添加遮挡或标注</div></div><div class="redact-controls"><button id="play" type="button" disabled>播放</button><input id="seek" type="range" min="0" max="1000" value="0" disabled aria-label="播放进度"><span id="clock">00:00:00</span></div><p class="redact-guide">预览中的青色虚线只表示正在编辑的区域，<strong>不会出现在导出视频里</strong>。黄色框、箭头与文字会导出。</p><div class="privacy-caution">导出会按实际播放时长处理，需要保持此标签页在前台。源视频音轨会尝试一并保留，但请试听成品；不支持的浏览器会明确提示。若画面中的信息会移动，请分段添加区域并逐段检查。</div></section>
+      <div class="media-stack"><section class="panel media-edit-panel"><h2>布置画面区域</h2><p class="hint">推荐用“实心遮挡”处理秘密信息。选定工具后在左侧画面拖拽。</p><div class="redact-tools" id="tools"><button type="button" data-kind="cover" class="active">■ 实心遮挡</button><button type="button" data-kind="blur">◌ 模糊</button><button type="button" data-kind="mosaic">▦ 马赛克</button><button type="button" data-kind="box">▢ 强调框</button><button type="button" data-kind="arrow">➜ 箭头</button><button type="button" data-kind="text">T 文字标注</button></div><div class="media-form" style="margin-top:14px"><div class="media-fields"><label>新增区域开始（秒）<input id="new-start" type="number" min="0" step="0.1" value="0"></label><label>结束（秒）<input id="new-end" type="number" min="0.1" step="0.1" value="5"></label></div><label>文字标注内容（选文字工具时填写）<input id="new-text" maxlength="80" placeholder="例如：点击这里查看详情"></label><div class="media-inline"><button id="set-current" type="button">从当前画面开始</button><button id="full-duration" type="button">覆盖整段视频</button></div></div><p class="hint">区域上限 120 个。短拖拽不会添加区域，避免误触。</p></section>
+        <section class="panel media-edit-panel"><div class="media-panel-head"><div><h2>区域清单与编辑</h2><p class="hint">选中区域后可调整出现时间与位置，或删除后重画。</p></div><span id="overlay-count" class="media-chip">0 个</span></div><div id="overlays" class="media-list" aria-label="画面区域清单"></div><div id="inspector" class="media-form" hidden><h3>编辑选中区域</h3><div class="media-fields"><label>开始（秒）<input id="edit-start" type="number" min="0" step="0.1"></label><label>结束（秒）<input id="edit-end" type="number" min="0.1" step="0.1"></label><label>左侧位置 %<input id="edit-x" type="number" min="0" max="99" step="0.1"></label><label>顶部位置 %<input id="edit-y" type="number" min="0" max="99" step="0.1"></label><label>宽度 %<input id="edit-w" type="number" min="1" max="100" step="0.1"></label><label>高度 %<input id="edit-h" type="number" min="1" max="100" step="0.1"></label></div><label>标注文字<input id="edit-text" maxlength="80"></label><div class="media-inline"><button id="save-overlay" class="primary" type="button">保存修改</button><button id="delete-overlay" class="danger" type="button">删除区域</button></div></div></section>
+        <section class="panel media-edit-panel"><h2>导出处理结果</h2><p class="hint">建议先播放预览，确认每个时间段都遮挡到位。导出为浏览器实际支持的 WebM 或 MP4，不伪装扩展名。</p><div class="redact-export"><label>保存方式<select id="save-mode"><option value="file">直接保存到本地文件（推荐）</option><option value="download">完成后下载（短片）</option></select></label><button id="export" class="primary" type="button" disabled>处理并保存视频</button><button id="cancel" type="button" hidden>取消处理</button></div><progress id="progress" class="redact-progress" max="100" value="0" hidden></progress><p id="export-status" class="media-status" role="status"></p><p class="media-tip">直接保存模式可处理长视频，不设固定时长上限，但会按实际播放时长处理，且需要浏览器支持文件选择；下载模式限 20 分钟，并最多暂存约 160 MB。处理期间请保持页面打开且在前台。</p></section>
+      </div>
+    </div>
+    <p id="status" class="media-status" role="status" aria-live="polite"></p>
+    <footer class="media-footer">本地处理 · 不上传素材 · 原视频不会覆盖 · 成品仍需人工复核</footer>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/redact/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:24 GMT -->
+</html>

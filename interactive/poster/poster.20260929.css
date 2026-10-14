@@ -1,0 +1,9 @@
+.poster-templates{grid-template-columns:repeat(2,minmax(0,1fr))}
+.poster-templates button{min-height:44px;font-size:14px}
+.poster-section{padding:14px 0 4px}
+.poster-check{margin-top:14px;padding:14px 18px;border:1px solid #d9e6d8;border-radius:12px;background:#f7fbf6}
+.poster-check h3{margin:0 0 6px;font-size:15px;color:#24452e}
+.poster-check ul{margin:0;padding-left:20px;color:#405568;font-size:13px;line-height:1.7}
+.poster-check li.warn{color:#9b5b0b}
+.poster-check li.error{color:#ad2341;font-weight:600}
+@media(max-width:400px){.poster-templates{grid-template-columns:repeat(2,minmax(0,1fr))}}

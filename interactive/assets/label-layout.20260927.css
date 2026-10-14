@@ -1,0 +1,17 @@
+/* QR library sets inline dimensions. Override width AND height to keep squares. */
+#asset-label-dialog{width:min(720px,calc(100vw - 32px));padding:24px;max-height:90dvh}
+#asset-label-dialog:has(.asset-label:only-child){width:min(520px,calc(100vw - 32px))}
+#asset-label-dialog h2{margin-bottom:12px}
+#asset-label-dialog>.hint{margin:0 0 14px}
+.asset-label-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:18px 0}
+.asset-label{padding:16px;gap:7px}
+.asset-label canvas{display:block;width:160px!important;height:auto!important;aspect-ratio:1;max-width:100%;flex:none}
+.asset-label:only-child{grid-column:1/-1;justify-self:center;width:min(100%,300px)}
+.asset-label:only-child canvas{width:220px!important}
+.asset-label small{line-height:1.5;font-size:11px;max-width:100%;margin-top:0}
+.asset-label-actions{position:sticky;bottom:-24px;background:#fff;border-top:1px solid #dce5ef;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;padding:14px 0;margin-top:12px}
+.asset-label-actions button{margin:0;min-height:42px}
+#asset-label-print{background:#2563eb;border-color:#2563eb;color:white}
+#asset-label-dialog #asset-label-status{font-size:13px;line-height:1.6;margin:12px 0}
+@media(max-width:500px){#asset-label-dialog{padding:18px}.asset-label-actions{bottom:-18px;gap:8px;padding:12px 0}.asset-label-actions button{flex:1 1 auto;font-size:13px}.asset-label-grid{grid-template-columns:1fr}.asset-label:only-child canvas{width:220px!important}}
+@media print{body.asset-print #asset-label-dialog .asset-label,body.asset-print #asset-label-dialog .asset-label:only-child{grid-column:auto;justify-self:stretch;width:auto;padding:3mm;gap:2mm}body.asset-print #asset-label-dialog .asset-label canvas,body.asset-print #asset-label-dialog .asset-label:only-child canvas{width:38mm!important;height:auto!important;aspect-ratio:1}body.asset-print #asset-label-dialog .asset-label-actions{display:none!important}}

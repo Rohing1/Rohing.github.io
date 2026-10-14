@@ -1,0 +1,5 @@
+SQLite WASM is provided by @sqlite.org/sqlite-wasm 3.53.4-build2.
+Package: https://www.npmjs.com/package/@sqlite.org/sqlite-wasm
+Upstream: https://github.com/sqlite/sqlite-wasm
+The npm wrapper is licensed under Apache License 2.0. The SQLite core is public domain.
+The bundled index.mjs includes its upstream license notices. See LICENSE-2.0.txt in this directory for the Apache License text.

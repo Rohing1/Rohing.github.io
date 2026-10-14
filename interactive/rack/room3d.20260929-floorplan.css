@@ -1,0 +1,39 @@
+.room3d-open{overflow:hidden}
+.room3d{position:fixed;inset:0;z-index:4000;display:flex;flex-direction:column;min-width:0;color:#e6f3ff;background:#071321;font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+.room3d *{box-sizing:border-box}
+.room3d-head{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:17px 25px;background:linear-gradient(110deg,#101e34,#0b192b 68%,#0b2431);border-bottom:1px solid #28516d}
+.room3d-head h2{font-size:27px;line-height:1.2;margin:4px 0;color:#f4fbff}
+.room3d-head p{font-size:13px;margin:0;color:#9bb8d0}
+.room3d-kicker{font-size:10px;letter-spacing:.2em;font-weight:700;color:#5bdfc6}
+.room3d-actions{display:flex;gap:8px;flex-wrap:wrap}
+.room3d button{color:#e7f4ff;background:#14283f;border:1px solid #345772;border-radius:10px;cursor:pointer;min-height:40px;padding:8px 13px;font:inherit}
+.room3d button:hover,.room3d button:focus-visible{background:#1d4963;border-color:#63b7c6}
+.room3d-actions [data-action=close]{background:#1b3548;border-color:#58aeb4}
+.room3d-main{display:grid;grid-template-columns:minmax(0,1fr) 300px;min-height:0;flex:1}
+.room3d-stage{position:relative;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(circle at 50% 40%,#15344b,#081322 70%);touch-action:none}
+.room3d-stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.room3d-stage canvas:active{cursor:grabbing}
+.room3d-side{display:flex;flex-direction:column;min-height:0;padding:17px;background:#0d1d2f;border-left:1px solid #2c4862}
+.room3d-side-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}
+.room3d-side-head strong{font-size:17px}.room3d-side-head span{font-size:12px;color:#8daec7}
+.room3d-search{display:block;font-size:12px;color:#a6c0d6}
+.room3d-search input{display:block;width:100%;height:41px;margin-top:6px;border:1px solid #345772;border-radius:9px;background:#12273d;color:#edf7ff;padding:8px 12px;font-size:14px}
+.room3d-search input::placeholder{color:#87a4bd}
+.room3d-list{display:grid;grid-auto-rows:minmax(60px,max-content);align-content:start;gap:7px;max-height:25%;overflow-y:auto;margin:13px 0;border-bottom:1px solid #294158;padding-bottom:12px}
+.room3d-entry{display:block;text-align:left;width:100%;height:auto;min-height:60px;line-height:1.35;font-size:13px}
+.room3d-entry strong,.room3d-entry span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.room3d-entry span{font-size:11px;color:#9cb9ce;margin-top:3px}
+.room3d-entry.selected{border-color:#38d5ba;background:#174a54}
+.room3d-info{min-height:0;overflow-y:auto;color:#e4f3ff}
+.room3d-info h3{font-size:20px;margin:4px 0 6px;overflow-wrap:anywhere}
+.room3d-info p{font-size:12px;color:#a7c1d7;line-height:1.6;margin:7px 0 15px}
+.room3d-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.room3d-stats div{background:#142b42;border:1px solid #2d4d63;border-radius:9px;padding:8px 6px;text-align:center}
+.room3d-stats strong{display:block;font-size:14px}.room3d-stats small{display:block;font-size:10px;color:#a6bed0}
+.room3d-devices{list-style:none;padding:0;margin:12px 0;display:grid;gap:5px}
+.room3d-devices li{display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:8px;border-radius:7px;background:#152a3d}
+.room3d-devices strong{font-size:12px;overflow-wrap:anywhere}.room3d-devices span{flex:none;color:#a8c1d4}
+.room3d-info>button{width:100%;font-size:12px}
+.room3d-notice{font-size:11px;line-height:1.55;color:#8aa8be;margin:12px 0 0}
+.room3d-bottom{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #27445d;padding:8px 24px;font-size:11px;color:#9bb9cc;background:#0c1d30}
+@media(max-width:760px){.room3d-head{padding:10px 12px;align-items:flex-start}.room3d-head h2{font-size:20px}.room3d-head p{display:none}.room3d-actions{justify-content:flex-end}.room3d-actions button{min-height:34px;padding:5px 8px;font-size:12px}.room3d-main{grid-template-columns:1fr;grid-template-rows:minmax(220px,1fr) minmax(160px,34vh)}.room3d-side{border-left:0;border-top:1px solid #2c4862;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow-y:auto}.room3d-side-head,.room3d-search{grid-column:1/-1}.room3d-side-head{margin:0}.room3d-search input{margin-top:2px;height:35px}.room3d-list{max-height:none;margin:0;border:0;padding:0;overflow-y:auto}.room3d-info{overflow-y:auto}.room3d-notice{grid-column:1/-1;margin:0}.room3d-bottom{padding:6px 10px}.room3d-bottom>span{max-width:50%;text-align:right}}

@@ -1,0 +1,6 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.HarCompare=api;})(globalThis,()=>{
+  const percentile=(values,p)=>{if(!values.length)return 0;const a=values.slice().sort((x,y)=>x-y);return a[Math.max(0,Math.ceil(a.length*p)-1)];};
+  function aggregate(report){const groups=new Map();for(const r of report.rows){const key=r.endpointKey||r.method+' '+r.host+r.label;let g=groups.get(key);if(!g){g={key,label:r.method+' '+r.host+r.label,count:0,errors:0,bytes:0,wait:0,durations:[]};groups.set(key,g);}g.count++;g.errors+=r.status>=400?1:0;g.bytes+=r.size;g.wait+=r.phases.wait;g.durations.push(r.duration);}for(const g of groups.values()){g.median=percentile(g.durations,.5);g.p95=percentile(g.durations,.95);g.errorRate=g.errors/g.count*100;g.averageBytes=g.bytes/g.count;g.averageWait=g.wait/g.count;delete g.durations;}return groups;}
+  function compare(before,after){const a=aggregate(before),b=aggregate(after),keys=new Set([...a.keys(),...b.keys()]);return [...keys].map(key=>{const x=a.get(key),y=b.get(key);return {key,label:(y||x).label,before:x||null,after:y||null,delta:x&&y?y.median-x.median:null,change:!x?'新增':!y?'消失':'共有'};}).sort((x,y)=>Math.abs(y.delta||0)-Math.abs(x.delta||0));}
+  return {aggregate,compare,percentile};
+});

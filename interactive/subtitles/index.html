@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/subtitles/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:23 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在浏览器本地校对视频字幕、制作章节，导入和导出 SRT、WebVTT；视频不上传。">
+  <title>字幕与章节制作台 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="../media-suite.20261002.css">
+  <script type="module" src="subtitles322c.js?v=20261005c"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><script defer src="../media-workflow.20261005f6e5.js?v=20261009"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>字幕与章节制作台</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell media-shell">
+    <section class="media-hero"><div><span class="eyebrow">LOCAL SUBTITLES / CHAPTERS</span><h1>让每句话，都出现在正确的时间。</h1><p>给教程、会议回放和活动视频制作字幕与章节。视频只在本机预览；编辑结果需自行导出保存。</p></div><span class="media-hero-mark" aria-hidden="true">CC</span></section>
+    <div class="media-notice"><strong>隐私与保存：</strong>视频不会上传，也不会保存在浏览器中。字幕和章节文本会自动保存在此浏览器；清理站点数据会丢失，请定期导出完整备份。此页不做自动语音识别，也不会把字幕烧录进视频。</div>
+    <div class="media-actions"><label class="button primary media-file-button">选择本地视频<input id="video-file" type="file" accept="video/*,.mp4,.webm,.mov" aria-label="选择本地视频"></label><label class="button media-file-button">导入 SRT / VTT<input id="subtitle-file" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip" aria-label="导入 SRT 或 VTT 字幕"></label><button id="backup" type="button">导出完整备份</button><label class="button media-file-button">恢复备份<input id="restore" type="file" accept=".json,application/json" aria-label="恢复字幕和章节备份"></label></div>
+    <div class="media-grid">
+      <section class="panel media-preview-panel"><div class="media-panel-head"><div><h2>视频预览</h2><p id="video-info" class="hint">尚未选择视频。可先编辑字幕，之后再载入视频校对。</p></div><span id="playhead" class="media-chip">00:00:00.000</span></div><div class="subtitle-stage"><video id="video" controls playsinline preload="metadata"></video><div id="caption-preview" class="caption-preview" aria-live="off"></div><div id="video-placeholder" class="subtitle-placeholder">选择本地视频，即可边看边校对字幕</div></div><p class="media-tip">点击字幕条可跳到对应时间；预览字幕显示在画面上，导出的 SRT/VTT 可供播放器或剪辑软件使用。</p><div class="media-export-row"><button id="export-srt" type="button">导出字幕 SRT</button><button id="export-vtt" type="button">导出字幕 VTT</button><button id="export-chapters" type="button">导出章节 VTT</button></div></section>
+      <div class="media-stack">
+        <section class="panel media-edit-panel"><div class="media-panel-head"><div><h2>字幕时间轴</h2><p class="hint">支持毫秒精度；按开始时间自动排序。避免连续字幕重叠。</p></div><span id="cue-count" class="media-chip">0 条</span></div><div class="media-form"><div class="media-fields"><label>开始时间<input id="cue-start" value="00:00:00.000" inputmode="text" aria-label="新字幕开始时间"></label><label>结束时间<input id="cue-end" value="00:00:03.000" inputmode="text" aria-label="新字幕结束时间"></label></div><label>字幕内容<textarea id="cue-text" rows="2" maxlength="500" placeholder="输入字幕，可换行"></textarea></label><div class="media-inline"><button id="cue-at-playhead" type="button">起点设为播放位置</button><button id="add-cue" class="primary" type="button">添加字幕</button><button id="cancel-cue" type="button" hidden>取消编辑</button></div></div><div id="cues" class="media-list" aria-label="字幕清单"></div></section>
+        <section class="panel media-edit-panel"><div class="media-panel-head"><div><h2>章节标记</h2><p class="hint">适合长会议、教程，导出独立的 WebVTT 章节文件。</p></div><span id="chapter-count" class="media-chip">0 个</span></div><div class="media-form"><div class="media-fields"><label>章节时间<input id="chapter-time" value="00:00:00.000" inputmode="text"></label><label>章节标题<input id="chapter-title" maxlength="100" placeholder="例如：环境准备"></label></div><div class="media-inline"><button id="chapter-at-playhead" type="button">取播放位置</button><button id="add-chapter" class="primary" type="button">添加章节</button><button id="cancel-chapter" type="button" hidden>取消编辑</button></div></div><div id="chapters" class="media-list" aria-label="章节清单"></div></section>
+      </div>
+    </div>
+    <p id="status" class="media-status" role="status" aria-live="polite"></p>
+    <footer class="media-footer">纯本地编辑 · 原视频不会修改 · 导出后请自行保管字幕与备份</footer>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/subtitles/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:23 GMT -->
+</html>

@@ -1,0 +1,13 @@
+This page performs all media processing locally, without uploading files.
+
+MP3: lamejs 1.2.1 / LAME, unchanged independent library (LGPL).
+https://github.com/zhuker/lamejs
+https://lame.sourceforge.net/
+Source: https://registry.npmjs.org/lamejs/-/lamejs-1.2.1.tgz
+See LICENSE-lamejs.txt. Library is fetched only when MP3 is requested.
+
+M4A: native browser AAC encoder, packaged using unchanged mp4-muxer 5.2.2 (MIT).
+https://github.com/Vanilagy/mp4-muxer
+Source: https://registry.npmjs.org/mp4-muxer/-/mp4-muxer-5.2.2.tgz
+See LICENSE-mp4-muxer.txt. Library is fetched only when M4A is requested.
+The small pinned muxer is not used to decode untrusted input; browsers decode inputs.

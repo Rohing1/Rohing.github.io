@@ -1,0 +1,8 @@
+#asset-delete-dialog{width:min(600px,calc(100vw - 32px));max-height:90dvh;overflow:auto}
+#asset-delete-form{display:grid;gap:16px}
+#asset-delete-form h2,#asset-delete-form p{margin:0}
+#asset-delete-form input{width:100%;min-width:0}
+#asset-delete-description{overflow-wrap:anywhere;line-height:1.6}
+#asset-delete-confirm{background:#fff0f1;border-color:#f1b3bf;color:#a31337}
+#asset-delete-error{overflow-wrap:anywhere}
+@media(max-width:500px){#asset-delete-dialog{padding:18px}#asset-delete-form .row button{flex:1 1 auto}}

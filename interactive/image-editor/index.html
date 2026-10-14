@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/image-editor/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:18 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="浏览器本地图片编辑器：图层、画笔、选区、蒙版、文字、形状、调色、PSD 尽力兼容与完整工程备份。">
+  <title>本地图片编辑器 · yan-jian.com</title>
+  <link rel="stylesheet" href="editor.css">
+  <script defer src="vendor/ag-psd-31.0.2.js"></script>
+  <script defer src="editor.js"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="app-header">
+    <div class="brand"><span class="brand-mark">◈</span><span>本地图片编辑器<small>IMAGE STUDIO</small></span></div>
+    <nav class="header-actions" aria-label="文件操作">
+      <button id="newDoc" type="button">新建</button>
+      <button id="openImage" type="button">打开图片</button>
+      <button id="addImage" type="button">添加图片图层</button>
+      <button id="openProject" type="button">恢复工程</button>
+      <button id="saveProject" type="button" class="emphasis">导出完整工程</button>
+      <button id="exportPsd" type="button">导出 PSD</button>
+      <a href="../index.html" class="back">返回工具箱 ↗</a>
+    </nav>
+  </header>
+
+  <div class="notice" role="note">图片仅在本机浏览器处理，不上传。自动草稿也会随浏览器数据清理而丢失，请定期下载完整工程。PSD 为尽力兼容，复杂文字、智能对象及色彩模式可能发生变化。</div>
+
+  <main class="workspace">
+    <aside class="tools-panel" aria-label="编辑工具">
+      <button class="tool active" data-tool="move" title="移动图层 (V)"><b>↖</b><span>移动</span></button>
+      <button class="tool" data-tool="select" title="矩形选区 (M)"><b>▣</b><span>选区</span></button>
+      <button class="tool" data-tool="crop" title="裁剪 (C)"><b>⌗</b><span>裁剪</span></button>
+      <button class="tool" data-tool="brush" title="画笔 (B)"><b>✎</b><span>画笔</span></button>
+      <button class="tool" data-tool="eraser" title="橡皮擦 (E)"><b>◌</b><span>橡皮</span></button>
+      <button class="tool" data-tool="fill" title="填充当前选区或图层 (G)"><b>▰</b><span>填充</span></button>
+      <button class="tool" data-tool="text" title="文字 (T)"><b>T</b><span>文字</span></button>
+      <button class="tool" data-tool="rect" title="矩形形状 (R)"><b>▭</b><span>矩形</span></button>
+      <button class="tool" data-tool="ellipse" title="椭圆形状 (O)"><b>◯</b><span>椭圆</span></button>
+      <button class="tool" data-tool="eyedropper" title="吸管 (I)"><b>◈</b><span>吸管</span></button>
+      <button class="tool" data-tool="hand" title="拖动画布 (H / 空格)"><b>✋</b><span>抓手</span></button>
+    </aside>
+
+    <section class="stage" aria-label="图片画布区域">
+      <div class="stage-toolbar">
+        <div class="toolbar-group"><button id="undo" title="撤销 Ctrl+Z">↶ 撤销</button><button id="redo" title="重做 Ctrl+Y">↷ 重做</button></div>
+        <div class="toolbar-group"><label>颜色 <input id="paintColor" type="color" value="#2563eb" aria-label="画笔与形状颜色"></label><label>大小 <input id="brushSize" type="range" min="1" max="120" value="18"><output id="brushSizeValue">18 px</output></label></div>
+        <div class="toolbar-group"><button id="copySelection" title="复制选区到新图层">复制选区</button><button id="clearSelection" title="删除选区内像素">清除选区</button><button id="deselect" title="取消选择 Ctrl+D">取消选区</button><button id="applyCrop" class="emphasis" hidden>应用裁剪</button></div>
+      </div>
+      <div id="viewport" class="viewport"><div id="canvasWrap" class="canvas-wrap"><canvas id="art" aria-label="图片编辑画布"></canvas><canvas id="overlay" aria-label="画布交互区域" tabindex="0"></canvas></div></div>
+      <div class="stage-footer"><span id="docInfo">1400 × 900 px</span><span id="status" role="status" aria-live="polite">准备就绪</span><div class="zoom"><button id="zoomOut" aria-label="缩小">−</button><input id="zoomRange" type="range" min="10" max="300" value="50" aria-label="画布缩放"><button id="zoomIn" aria-label="放大">＋</button><button id="zoomFit">适应</button><span id="zoomLabel">50%</span></div></div>
+    </section>
+
+    <aside class="right-panel">
+      <section class="side-section export-section"><h2>导出图片</h2><div class="export-row"><select id="exportFormat" aria-label="导出格式"><option value="png">PNG · 支持透明</option><option value="jpeg">JPG · 较小文件</option><option value="webp">WebP · 网页使用</option></select><button id="exportImage" class="emphasis">下载</button></div><label class="inline-label">质量 <input id="quality" type="range" min="40" max="100" value="92"><output id="qualityValue">92%</output></label></section>
+      <section class="side-section layers-section"><div class="section-title"><h2>图层 <span id="layerCount">0</span></h2><div><button id="addRaster" title="新建像素图层">＋图层</button><button id="addMask" title="给像素图层增加蒙版">＋蒙版</button></div></div><div id="layers" class="layers" role="listbox" aria-label="图层列表"></div><div class="layer-operations"><button id="moveLayerUp" title="图层上移">上移</button><button id="moveLayerDown" title="图层下移">下移</button><button id="duplicateLayer" title="复制图层">复制</button><button id="mergeLayer" title="与下层合并">合并</button><button id="deleteLayer" title="删除图层" class="danger">删除</button></div></section>
+      <section class="side-section properties-section"><h2>图层属性</h2><div id="noLayer" class="empty-state">选择图层后可调整位置、混合、文字和调色。</div><div id="properties" hidden>
+        <label>名称 <input id="layerName" maxlength="80"></label>
+        <div class="field-grid"><label>X <input id="layerX" type="number" step="1"></label><label>Y <input id="layerY" type="number" step="1"></label><label>宽 <input id="layerW" type="number" min="1" step="1"></label><label>高 <input id="layerH" type="number" min="1" step="1"></label></div>
+        <label>旋转 <input id="layerRotation" type="range" min="-180" max="180" value="0"><output id="rotationValue">0°</output></label>
+        <label>不透明度 <input id="layerOpacity" type="range" min="0" max="100" value="100"><output id="opacityValue">100%</output></label>
+        <label>混合模式 <select id="layerBlend"><option value="source-over">正常</option><option value="multiply">正片叠底</option><option value="screen">滤色</option><option value="overlay">叠加</option><option value="darken">变暗</option><option value="lighten">变亮</option><option value="color-dodge">颜色减淡</option><option value="difference">差值</option></select></label>
+        <div id="textFields" class="type-fields" hidden><label>文字内容 <textarea id="textContent" rows="4" maxlength="4000"></textarea></label><div class="field-grid"><label>字号 <input id="fontSize" type="number" min="8" max="600"></label><label>字重 <select id="fontWeight"><option value="400">常规</option><option value="700">加粗</option></select></label></div><label>字体 <select id="fontFamily"><option value="Microsoft YaHei, sans-serif">雅黑 / 无衬线</option><option value="SimSun, serif">宋体</option><option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="monospace">等宽</option></select></label><label>文字颜色 <input id="textColor" type="color"></label><label>对齐 <select id="textAlign"><option value="left">左对齐</option><option value="center">居中</option><option value="right">右对齐</option></select></label></div>
+        <div id="shapeFields" class="type-fields" hidden><label>填充颜色 <input id="shapeFill" type="color"></label><label>描边颜色 <input id="shapeStroke" type="color"></label><label>描边宽度 <input id="shapeStrokeWidth" type="number" min="0" max="100"></label></div>
+        <div id="maskFields" class="mask-fields" hidden><label class="check"><input id="maskEnabled" type="checkbox" checked>启用蒙版</label><label class="check"><input id="editMask" type="checkbox">用画笔编辑蒙版</label><p>编辑蒙版时：画笔显示、橡皮隐藏。原像素不会被删除。</p><button id="removeMask">移除蒙版</button></div>
+        <details open><summary>基础调色与滤镜</summary><div class="adjustments"><label>亮度 <input id="adjBrightness" type="range" min="0" max="200" value="100"><output>100%</output></label><label>对比度 <input id="adjContrast" type="range" min="0" max="200" value="100"><output>100%</output></label><label>饱和度 <input id="adjSaturate" type="range" min="0" max="200" value="100"><output>100%</output></label><label>色相 <input id="adjHue" type="range" min="-180" max="180" value="0"><output>0°</output></label><label>黑白 <input id="adjGrayscale" type="range" min="0" max="100" value="0"><output>0%</output></label><label>复古 <input id="adjSepia" type="range" min="0" max="100" value="0"><output>0%</output></label><label>模糊 <input id="adjBlur" type="range" min="0" max="30" value="0"><output>0 px</output></label><button id="resetAdjustments">重置调色</button></div></details>
+      </div></section>
+    </aside>
+  </main>
+
+  <div id="draftPrompt" class="draft-prompt" hidden><span>检测到此浏览器的自动草稿。浏览器数据清理后草稿会丢失。</span><button id="restoreDraft" class="emphasis">恢复草稿</button><button id="dismissDraft">暂不恢复</button></div>
+  <dialog id="newDialog"><form method="dialog"><h2>新建画布</h2><p>建议先按最终用途设置尺寸；浏览器处理上限为 1600 万像素。</p><div class="field-grid"><label>宽度 / px<input id="newWidth" type="number" min="16" max="5000" value="1400" required></label><label>高度 / px<input id="newHeight" type="number" min="16" max="5000" value="900" required></label></div><label>背景<select id="newBackground"><option value="#ffffff">白色</option><option value="transparent">透明</option><option value="#101828">深色</option></select></label><div class="dialog-actions"><button value="cancel">取消</button><button id="createDoc" value="create" class="emphasis">创建画布</button></div></form></dialog>
+  <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/avif,.psd,image/vnd.adobe.photoshop" hidden>
+  <input id="projectInput" type="file" accept=".json,application/json" hidden>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/image-editor/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:19 GMT -->
+</html>

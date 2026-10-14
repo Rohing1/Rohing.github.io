@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/convert/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:19 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在浏览器本地批量转换视频、音频与图片，按任务查看进度并下载结果；素材不上传。">
+  <title>本地格式转换中心 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="convert.20261009.css">
+  <script defer src="convert.20261009.js"></script>
+  <script defer src="../media-workflow.20261005f6e5.js?v=20261009"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><div class="brand">▦ 本地格式转换中心</div><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="intro"><div><span class="eyebrow">LOCAL FORMAT CONVERTER</span><h1>放进文件，选好格式，逐个完成。</h1><p class="description">把常用的视频、音频和图片转换集中到一个队列。文件只在当前浏览器处理；转换结果由你选择保存位置或下载。</p></div><span class="local-badge">本地处理 · 不上传</span></section>
+    <div class="notice">这是面向常用格式的轻量转换台，不等同于桌面版格式工厂。实际可用格式取决于浏览器编解码能力；大文件转码会占用 CPU、内存和电量。请保留原件，下载后播放或打开成品核对。</div>
+    <div class="layout">
+      <section class="panel settings" aria-labelledby="setup-title">
+        <h2 id="setup-title">添加与设置</h2>
+        <label class="upload" id="drop-zone">＋ 选择文件或拖入这里<input id="files" type="file" multiple accept="video/*,audio/*,image/*,.mp4,.mov,.mkv,.webm,.mp3,.wav,.m4a,.ogg,.flac,.jpg,.jpeg,.png,.webp,.bmp" aria-label="选择视频、音频或图片文件"></label>
+        <p class="hint">最多 12 个任务，按顺序逐个处理。支持的输出会按文件类型显示；不支持的输入会说明原因。</p>
+        <details class="batch-settings"><summary>画质、码率与尺寸（可选）</summary><div class="settings-fields">
+        <label>视频画面上限<select id="video-size"><option value="0">保持原尺寸</option><option value="1920" selected>最长边 1920 像素</option><option value="1280">最长边 1280 像素</option><option value="854">最长边 854 像素</option></select></label>
+        <label>视频质量<select id="video-quality"><option value="high">清晰优先</option><option value="medium" selected>均衡</option><option value="low">体积优先</option></select></label>
+        <label>音频码率<select id="audio-bitrate"><option value="128">128 kbps</option><option value="192" selected>192 kbps</option><option value="256">256 kbps</option></select></label>
+        <label>图片最长边<select id="image-size"><option value="0">保持原尺寸</option><option value="3840">3840 像素</option><option value="1920">1920 像素</option><option value="1280">1280 像素</option></select></label>
+        <label>图片质量（JPG / WebP）<select id="image-quality"><option value="0.92">高质量</option><option value="0.82" selected>均衡</option><option value="0.68">小体积</option></select></label>
+        </div></details>
+        <label>保存方式<select id="save-mode"><option value="file">选择保存文件夹，逐个写入（推荐）</option><option value="download">保留临时结果，逐项下载（小文件）</option></select></label>
+        <p id="save-note" class="hint">开始时会选择一次保存文件夹，若有同名文件将自动加序号，不覆盖原文件。需桌面版 Chrome / Edge 等支持该功能的浏览器；普通下载模式只适合较小文件。</p>
+        <label>输出文件名前缀（可选）<input id="name-prefix" maxlength="40" placeholder="例如：会议整理"></label>
+        <label class="check"><input id="auto-download" type="checkbox">每项完成后自动下载（浏览器可能拦截多文件）</label>
+        <div class="actions"><button id="start" class="primary" type="button" disabled>开始处理</button><button id="pause" type="button" hidden>本项完成后暂停</button><button id="cancel" type="button" hidden>取消当前项并停止队列</button></div>
+        <p id="status" class="status" role="status" aria-live="polite">先添加文件，原文件不会被修改。</p>
+      </section>
+      <section class="panel queue-panel" aria-labelledby="queue-title">
+        <div class="queue-head"><div><h2 id="queue-title">统一处理队列</h2><p class="hint">音视频可逐项裁剪、静音与转换；开始前可生成前 5 秒成品试听 / 试看。参数修改后请重新试听。</p></div><span id="count" class="pill">0 / 12</span></div>
+        <p id="queue-summary" class="hint" role="status" aria-live="polite"></p>
+        <section id="trial-panel" hidden aria-label="短片试处理结果"><div class="row between"><h3 id="trial-title">导出前试听 / 试看</h3><button id="trial-close" type="button">关闭试听</button></div><video id="trial-player" controls playsinline preload="metadata"></video><p class="hint">这是按当前任务参数生成的前 5 秒成品，不是原素材预览；完整成品请在处理完成后再次核对。</p></section>
+        <div id="jobs" class="jobs"><div class="empty">还没有任务。选择本地视频、音频或图片开始。</div></div>
+        <div class="queue-footer"><button id="retry-all" type="button" disabled>重新排入失败 / 取消项</button><button id="zip" type="button" disabled>打包本页结果 ZIP</button><button id="clear" type="button" disabled>清除已完成任务</button><span class="hint">临时结果合计上限：电脑 120 MB / 触屏设备 48 MB；更大批次请选文件夹直接写入。未下载的结果清除前会询问。ZIP 上限：电脑 100 MB / 触屏设备 32 MB；文件夹模式不保留内存副本。</span></div>
+      </section>
+    </div>
+    <section class="panel limits"><h2>能力边界</h2><div class="limit-grid"><p><strong>视频</strong>输出 MP4 或 WebM，也可提取 WAV / M4A 音频；默认重新编码，最长边 1920 像素，可调整尺寸与质量。无法识别的编码会停止。</p><p><strong>音频</strong>输出 WAV、M4A 或 MP3；MP3 需要全量解码，电脑限 10 分钟 / 80 MB，触屏设备限 2 分钟 / 32 MB，试处理同样受限。长音频优先使用流式 M4A / WAV 或桌面软件。</p><p><strong>图片</strong>输出 JPG、PNG 或 WebP；保留透明背景请选择 PNG / WebP。动画图只取首帧，不用于动图转换。</p></div><p class="hint">串行处理能降低峰值，但不保证大文件不会卡顿；手机端请优先处理短素材。DVD / 光盘、受保护媒体、Office / PDF 格式转换不在本页处理。PDF 可使用网站现有工具。取消时，浏览器原生解码阶段可能要等待结束；文件夹中可能残留空文件或未完成文件，请勿作为成品使用。</p></section>
+    <footer class="footer">源文件不改动 · 页面关闭后任务与临时结果即消失 · <a href="../video/mediabunny.LICENSE.txt">视频组件许可</a> · <a href="../audio/vendor/NOTICE.txt">音频组件许可</a></footer>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/convert/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:21 GMT -->
+</html>

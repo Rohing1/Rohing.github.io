@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from https://yan-jian.com/interactive/raid/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:01 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="在浏览器本地规划 RAID 0、1、5、6、10 容量，模拟磁盘故障、热备与重建窗口；不连接真实存储设备。">
+  <title>RAID 与存储容量沙盘 · yan-jian.com</title>
+  <link rel="stylesheet" href="../common3860.css?v=1">
+  <link rel="stylesheet" href="raida1d9.css?v=20260930b">
+  <script type="module" src="raida1d9.js?v=20260930b"></script>
+<link rel="stylesheet" href="../workbench.20261005322c.css?v=20261005c"><script defer src="../workbench.20261005322c.js?v=20261005c"></script><link rel="stylesheet" href="../share.202610136bc8.css?v=20261013"><script defer src="../share.202610136bc8.js?v=20261013"></script><link id="yj-site-assistant-style" rel="stylesheet" href="../../assets/static/site-assistant-b2736bde5428.css">
+<script id="yj-site-assistant-script" defer src="../../assets/static/site-assistant-348c89d16580.js" data-yj-index="../../assets/static/site-assistant-index-fddb845fd1ab.json" data-yj-worker="../../assets/static/site-assistant-worker-c3769b27ff9a.js"></script>
+<link rel="stylesheet" href="../guide.202610136bc8.css?v=20261013"><script defer src="../guide.202610136bc8.js?v=20261013"></script></head>
+<body>
+  <header class="topbar"><strong>▤ RAID 与存储容量沙盘</strong><a href="../index.html">返回在线工具 ↗</a></header>
+  <main class="shell">
+    <section class="intro raid-intro">
+      <div><span class="eyebrow">STORAGE PLANNING · LOCAL SIMULATION</span><h1>先看容量，再看故障。</h1><p class="description">调整硬盘、阵列与热备配置，直观看到空间分配；点选成员盘，观察故障后阵列是否仍可用。所有计算都在本机完成，不连接真实设备。</p></div>
+      <div class="intro-mark" aria-hidden="true"><span>RAID</span><small>PLAN / TEST / LEARN</small></div>
+    </section>
+    <div class="notice"><strong>规划模型，不是设备承诺。</strong> 不同控制器、文件系统、格式化方式及厂商限制可能改变实际可用空间与重建行为。RAID 不能代替独立备份。</div>
+    <div class="toolbar" aria-label="本机数据操作"><span id="save-state">方案仅保存在当前浏览器</span><div class="toolbar-actions"><button id="export" type="button">导出完整备份</button><label class="button import-button">恢复备份<input id="import" type="file" accept=".json,application/json" aria-label="恢复 RAID 沙盘备份"></label><button id="reset" type="button">恢复示例</button></div></div>
+    <div class="workspace">
+      <section class="panel controls" aria-labelledby="settings-title">
+        <div class="panel-heading"><div><span class="section-kicker">01 / CONFIGURE</span><h2 id="settings-title">配置阵列</h2></div><span class="local-tag">本地模拟</span></div>
+        <fieldset class="level-picker"><legend>RAID 级别</legend><div class="level-options" id="level-options">
+          <label><input type="radio" name="level" value="0"><span>RAID 0</span></label>
+          <label><input type="radio" name="level" value="1"><span>RAID 1</span></label>
+          <label><input type="radio" name="level" value="5"><span>RAID 5</span></label>
+          <label><input type="radio" name="level" value="6"><span>RAID 6</span></label>
+          <label><input type="radio" name="level" value="10"><span>RAID 10</span></label>
+        </div></fieldset>
+        <p class="level-rule" id="level-rule"></p>
+        <div class="setting"><div class="setting-top"><label for="disks">硬盘总数 <small>含热备盘</small></label><output id="disks-output" for="disks"></output></div><input id="disks" type="range" min="2" max="48" step="1"><div class="range-ends"><span>2 块</span><span>48 块</span></div></div>
+        <div class="setting"><div class="setting-top"><label for="diskTB">单盘标称容量</label><output id="diskTB-output" for="diskTB"></output></div><input id="diskTB" type="range" min="0.25" max="100" step="0.25"><div class="range-ends"><span>0.25 TB</span><span>100 TB</span></div><label class="precise-input" for="diskTB-number">精确输入 <span><input id="diskTB-number" type="number" min="0.25" max="100" step="0.25" inputmode="decimal" aria-label="精确输入单盘容量，单位 TB"> TB</span></label></div>
+        <div class="setting compact"><label for="spares">热备盘数量 <small>不计入阵列容量</small></label><select id="spares"></select></div>
+        <div class="setting"><div class="setting-top"><label for="reserve">建议预留空间 <small>不是 RAID 开销</small></label><output id="reserve-output" for="reserve"></output></div><input id="reserve" type="range" min="0" max="50" step="5"><div class="range-ends"><span>0%</span><span>50%</span></div></div>
+        <details class="advanced"><summary>重建窗口假设</summary><label for="rebuildMBps">假设的单盘有效重建速度 <strong id="speed-output"></strong></label><input id="rebuildMBps" type="range" min="25" max="500" step="25"><p>下方时间仅用“单盘容量 ÷ 输入速度”估算理论窗口；校验、业务争用和设备策略可能令实际时间显著增加。</p></details>
+        <div class="presets"><span>快速示例</span><div><button type="button" data-preset="small">4 盘 · RAID 5</button><button type="button" data-preset="balanced">8 盘 · RAID 6</button><button type="button" data-preset="performance">12 盘 · RAID 10</button></div></div>
+      </section>
+      <div class="results">
+        <section class="summary panel" aria-labelledby="result-title"><div class="panel-heading"><div><span class="section-kicker">02 / CAPACITY</span><h2 id="result-title">容量结果</h2></div><span id="array-state" class="state-badge"></span></div>
+          <div class="metrics"><div class="metric"><span>硬盘标称总容量</span><strong id="raw-capacity">—</strong><small>所有硬盘之和</small></div><div class="metric primary-metric"><span>阵列可用容量</span><strong id="raid-capacity">—</strong><small id="usable-tib">不含文件系统开销</small></div><div class="metric"><span>建议使用上限</span><strong id="planned-capacity">—</strong><small id="reserve-note">扣除自定预留</small></div></div>
+          <div class="bar-heading"><strong>总标称容量如何分配</strong><span id="efficiency"></span></div><div id="capacity-bar" class="capacity-bar" role="img" aria-label="容量分配"></div><div class="legend"><span><i class="key data"></i>建议使用</span><span><i class="key reserve"></i>自定预留</span><span><i class="key overhead"></i>镜像 / 校验</span><span><i class="key spare"></i>热备</span></div><p class="small-note" id="capacity-note"></p>
+        </section>
+        <section class="panel simulation" aria-labelledby="simulation-title"><div class="panel-heading"><div><span class="section-kicker">03 / FAILURE SIMULATION</span><h2 id="simulation-title">点一块盘，看看会怎样</h2></div><button id="clear-faults" type="button">清除故障</button></div><p class="simulation-help">点击成员盘切换“正常 / 故障”；再次点击相当于撤销该次模拟故障。配置热备时会模拟自动接管，但重建不会自动完成。RAID 10 按相邻编号两盘组成镜像对；实际配对以设备为准。</p><div id="disk-grid" class="disk-grid"></div><div class="rebuild-flow" aria-label="热备接管与重建阶段"><span id="stage-failure">① 成员盘故障</span><span id="stage-rebuilding">② 热备接管 · 重建中</span><span id="stage-complete">③ 重建完成 · 冗余恢复</span></div><div class="rebuild-actions"><p id="rebuild-stage" class="small-note"></p><button id="complete-rebuild" type="button">模拟重建完成</button></div><div id="fault-result" class="fault-result" role="status"></div><p id="rebuild-note" class="small-note"></p></section>
+      </div>
+    </div>
+    <section class="panel compare" aria-labelledby="compare-title"><div class="panel-heading"><div><span class="section-kicker">04 / COMPARE</span><h2 id="compare-title">同一批硬盘，不同 RAID 怎么选？</h2></div><span>热备盘统一从成员盘中扣除</span></div><div class="table-scroll"><table><thead><tr><th>级别</th><th>阵列可用容量</th><th>容量利用率</th><th>故障容忍方式</th></tr></thead><tbody id="comparison-body"></tbody></table></div></section>
+    <section class="panel notes"><h2>使用前请记住</h2><div><p><strong>容量是理论值。</strong> 按等容量硬盘、十进制 TB 计算；系统显示的 TiB、文件系统格式化和元数据会让最终数字不同。</p><p><strong>故障是简化模拟。</strong> 热备接管并不等于恢复冗余；“模拟重建完成”需要手动确认，也不代表真实设备已完成。期间仍可能遇到介质错误、性能下降或控制器限制。</p><p><strong>RAID 不是备份。</strong> 误删除、勒索软件和设备整体故障不能只靠阵列冗余解决。计算规则参考 <a href="https://www.dell.com/support/manuals/en-uk/poweredge-t440/s140_ug/warning-found-virtual-disks-that-are-degraded?guid=guid-7dafd785-f9b7-4a72-9613-3fa8e5cac3e0&amp;lang=en-us" target="_blank" rel="noopener noreferrer">Dell RAID 状态说明</a>与 <a href="https://www.dell.com/support/manuals/en-af/dell-opnmang-srvr-admin-v8.2/omss_ug-v8.1.1/virtual-disk-task-reconfigure-step-2-of-3?guid=guid-d63d4671-84cc-4848-aa01-1a3821c6412e&amp;lang=en-us" target="_blank" rel="noopener noreferrer">Dell 容量说明</a>。</p><p>需要同时估算 IOPS、吞吐和网络瓶颈？<a href="../storage-performance/index.html">打开存储性能沙盘 ↗</a></p></div></section>
+    <p class="privacy-note">本页不上传配置或读取真实磁盘。浏览器站点数据被清除时，本机方案也会丢失；请定期下载完整备份。</p><footer class="footer">RAID 与存储容量沙盘 · yan-jian.com</footer>
+  </main>
+</body>
+
+<!-- Mirrored from https://yan-jian.com/interactive/raid/ by HTTrack Website Copier/3.x [XR&CO], Wed, 14 Oct 2026 06:41:02 GMT -->
+</html>
