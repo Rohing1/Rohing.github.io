@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="在浏览器本地规划 RAID 0、1、5、6、10 容量，模拟磁盘故障、热备与重建窗口；不连接真实存储设备。">
-  <title>RAID 与存储容量沙盘 · yan-jian.com</title>
+  <title>RAID 与存储容量沙盘 · wiki.982013.xyz</title>
   <link rel="stylesheet" href="../common3860.css?v=1">
   <link rel="stylesheet" href="raida1d9.css?v=20260930b">
   <script type="module" src="raida1d9.js?v=20260930b"></script>
@@ -50,7 +50,7 @@
     </div>
     <section class="panel compare" aria-labelledby="compare-title"><div class="panel-heading"><div><span class="section-kicker">04 / COMPARE</span><h2 id="compare-title">同一批硬盘，不同 RAID 怎么选？</h2></div><span>热备盘统一从成员盘中扣除</span></div><div class="table-scroll"><table><thead><tr><th>级别</th><th>阵列可用容量</th><th>容量利用率</th><th>故障容忍方式</th></tr></thead><tbody id="comparison-body"></tbody></table></div></section>
     <section class="panel notes"><h2>使用前请记住</h2><div><p><strong>容量是理论值。</strong> 按等容量硬盘、十进制 TB 计算；系统显示的 TiB、文件系统格式化和元数据会让最终数字不同。</p><p><strong>故障是简化模拟。</strong> 热备接管并不等于恢复冗余；“模拟重建完成”需要手动确认，也不代表真实设备已完成。期间仍可能遇到介质错误、性能下降或控制器限制。</p><p><strong>RAID 不是备份。</strong> 误删除、勒索软件和设备整体故障不能只靠阵列冗余解决。计算规则参考 <a href="https://www.dell.com/support/manuals/en-uk/poweredge-t440/s140_ug/warning-found-virtual-disks-that-are-degraded?guid=guid-7dafd785-f9b7-4a72-9613-3fa8e5cac3e0&amp;lang=en-us" target="_blank" rel="noopener noreferrer">Dell RAID 状态说明</a>与 <a href="https://www.dell.com/support/manuals/en-af/dell-opnmang-srvr-admin-v8.2/omss_ug-v8.1.1/virtual-disk-task-reconfigure-step-2-of-3?guid=guid-d63d4671-84cc-4848-aa01-1a3821c6412e&amp;lang=en-us" target="_blank" rel="noopener noreferrer">Dell 容量说明</a>。</p><p>需要同时估算 IOPS、吞吐和网络瓶颈？<a href="../storage-performance/index.html">打开存储性能沙盘 ↗</a></p></div></section>
-    <p class="privacy-note">本页不上传配置或读取真实磁盘。浏览器站点数据被清除时，本机方案也会丢失；请定期下载完整备份。</p><footer class="footer">RAID 与存储容量沙盘 · yan-jian.com</footer>
+    <p class="privacy-note">本页不上传配置或读取真实磁盘。浏览器站点数据被清除时，本机方案也会丢失；请定期下载完整备份。</p><footer class="footer">RAID 与存储容量沙盘 · wiki.982013.xyz</footer>
   </main>
 </body>
 

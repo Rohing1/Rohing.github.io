@@ -165,7 +165,7 @@
 .yj-image-lightbox .yj-image-preview-frame img{max-height:calc(92vh - 20px)!important;border-radius:6px 6px 0 0;box-shadow:none}
 .yj-image-preview-frame .yj-image-watermark{border-radius:0 0 6px 6px}
 body:has(.markdown-section .yj-image-frame) .lightbox .lb-outerContainer{height:auto!important}
-body:has(.markdown-section .yj-image-frame) .lightbox .lb-container:after{content:"yan-jian.com";display:block;box-sizing:border-box;height:20px;padding:0 9px;background:#f8fafc;color:rgba(100,116,139,.38);font:11px/20px Arial,sans-serif;letter-spacing:.4px;text-align:right;pointer-events:none}
+body:has(.markdown-section .yj-image-frame) .lightbox .lb-container:after{content:"wiki.982013.xyz";display:block;box-sizing:border-box;height:20px;padding:0 9px;background:#f8fafc;color:rgba(100,116,139,.38);font:11px/20px Arial,sans-serif;letter-spacing:.4px;text-align:right;pointer-events:none}
 /* yj-image-watermark:end */
 /* yj-long-image-viewer:start */
 @media(max-width:700px){
